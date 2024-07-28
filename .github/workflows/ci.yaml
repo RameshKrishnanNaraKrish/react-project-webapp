@@ -1,0 +1,79 @@
+name: CI Workflow
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build:
+    name: Build, Test, and Deploy
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '14'
+
+      - name: Install dependencies
+        run: |
+          cd frontend
+          npm install
+          cd ../service1
+          npm install
+          cd ../service2
+          npm install
+
+    
+      - name: Log in to DockerHub
+        uses: docker/login-action@v2
+        with:
+            username: ${{ secrets.DOCKER_USERNAME }}
+            password: ${{ secrets.DOCKER_PASSWORD }}
+
+
+      - name: Build Docker Images
+        run: |
+          cd service1
+          docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/ReactprojectWebapp/service1:${{ github.run_id }} .
+          cd ../service2
+          docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/ReactprojectWebapp/service2:${{ github.run_id }} .
+          cd ../frontend
+          docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/ReactprojectWebapp/frontend:${{ github.run_id }} .
+
+
+      - name: Push Docker Images
+        run: |
+          docker push ${{ secrets.DOCKERHUB_USERNAME }}/ReactprojectWebapp/service1:${{ github.run_id }}
+          docker push ${{ secrets.DOCKERHUB_USERNAME }}/ReactprojectWebapp/service2:${{ github.run_id }}
+          docker push ${{ secrets.DOCKERHUB_USERNAME }}/ReactprojectWebapp/frontend:${{ github.run_id }}
+
+      - name: SonarCloud Scan
+        uses: SonarSource/sonarcloud-github-action@master
+        env:
+            SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+
+      - name: Update Helm Values
+        run: |
+          helm upgrade myapp ./charts/myapp \
+            --set image.service1.repository=rameshkrishnannarakrish/ReactprojectWebapp/service1 \
+            --set image.service1.tag=${{ github.run_id }} \
+            --set image.service2.repository=rameshkrishnannarakrish/ReactprojectWebapp/service2 \
+            --set image.service2.tag=${{ github.run_id }} \
+            --set image.frontend.repository=rameshkrishnannarakrish/ReactprojectWebapp/frontend \
+            --set image.frontend.tag=${{ github.run_id }}
+
+      - name: Commit and push changes
+        run: |
+            git config --global user.email "ramesh@gmail.com"
+            git config --global user.name "Ramesh krishnan"
+            git add helm/react-web-app-chart/values.yaml
+            git commit -m "Update tag in Helm chart"
+            git push
