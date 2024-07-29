@@ -22,17 +22,6 @@ jobs:
         with:
           node-version: '14'
 
-      - name: Install dependencies
-        run: |
-          cd frontend
-          npm install
-          npm audit fix --force
-          cd ../backend/service1
-          npm install
-          npm audit fix --force
-          cd ../service2
-          npm install
-          npm audit fix --force
 
   DockerHub:
     name: Docker Login
@@ -45,14 +34,20 @@ jobs:
             username: ${{ secrets.DOCKER_USERNAME }}
             password: ${{ secrets.DOCKER_PASSWORD }}
 
-
-      - name: Build Docker Images
+      - name: Install dependencies and Build Docker Images
         run: |
-          cd ../frontend
+          cd frontend
+          npm install
+          npm audit fix --force
+          npm run build
           docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/ReactprojectWebapp/frontend:${{ github.run_id }} .
           cd ../backend/service1
+          npm install
+          npm audit fix --force
           docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/ReactprojectWebapp/service1:${{ github.run_id }} .
           cd ../service2
+          npm install
+          npm audit fix --force
           docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/ReactprojectWebapp/service2:${{ github.run_id }} .
 
 
