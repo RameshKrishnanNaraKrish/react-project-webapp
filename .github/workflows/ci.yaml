@@ -30,7 +30,7 @@ jobs:
           cd ../backend/service1
           npm install
           npm audit fix --force
-          cd ../backend/service2
+          cd ../service2
           npm install
           npm audit fix --force
 
