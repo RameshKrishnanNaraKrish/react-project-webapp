@@ -14,6 +14,6 @@ spec:
     spec:
       containers:
       - name: service2
-        image: 123456789012.dkr.ecr.us-west-2.amazonaws.com/myrepo/service2:latest
+        image: rameshkrishnannarakrish/ReactprojectWebapp/service2:{{ .Values.image.service2.tag }}
         ports:
         - containerPort: 3001

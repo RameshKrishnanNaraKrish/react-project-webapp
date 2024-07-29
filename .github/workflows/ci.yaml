@@ -33,6 +33,7 @@ jobs:
 
   DockerHub:
     name: Docker Login
+    needs: build
     runs-on: ubuntu-latest
     steps:
       - name: Log in to DockerHub
@@ -88,7 +89,7 @@ jobs:
               --set image.service2.repository=rameshkrishnannarakrish/ReactprojectWebapp/service2 \
               --set image.service2.tag=${{ github.run_id }} \
               --set image.frontend.repository=rameshkrishnannarakrish/ReactprojectWebapp/frontend \
-              --set image.frontend.tag=${{ github.run_id }}      - name: Commit and push changes
+              --set image.frontend.tag=${{ github.run_id }}
 
         - name: Commit and push changes
           run: |
