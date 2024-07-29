@@ -26,10 +26,13 @@ jobs:
         run: |
           cd frontend
           npm install
+          npm audit fix --force
           cd ../service1
           npm install
+          npm audit fix --force
           cd ../service2
           npm install
+          npm audit fix --force
 
   DockerHub:
     name: Docker Login
