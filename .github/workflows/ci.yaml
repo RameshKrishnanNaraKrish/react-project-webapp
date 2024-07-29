@@ -67,6 +67,9 @@ jobs:
             password: ${{ secrets.DOCKER_PASSWORD }}   
       - name: Push Docker Images
         run: |
+          docker tag reactprojectwebapp/frontend:${{ github.run_id }} reactprojectwebapp/frontend:${{ github.run_id }}
+          docker tag reactprojectwebapp/service1:${{ github.run_id }} reactprojectwebapp/service1:${{ github.run_id }}
+          docker tag reactprojectwebapp/service2:${{ github.run_id }} reactprojectwebapp/service2:${{ github.run_id }}
           docker push reactprojectwebapp/service1:${{ github.run_id }}
           docker push reactprojectwebapp/service2:${{ github.run_id }}
           docker push reactprojectwebapp/frontend:${{ github.run_id }}
