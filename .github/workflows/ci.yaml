@@ -48,7 +48,7 @@ jobs:
 
       - name: Build Docker Images
         run: |
-          echo pwd
+          cat pwd
           cd frontend
           docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/ReactprojectWebapp/frontend:${{ github.run_id }} .
           cd ../backend/service1
@@ -101,4 +101,5 @@ jobs:
             git config --global user.name "Ramesh krishnan"
             git add helm/react-web-app-chart/values.yaml
             git commit -m "Update tag in Helm chart"
-            git push  
+            git push
+            
