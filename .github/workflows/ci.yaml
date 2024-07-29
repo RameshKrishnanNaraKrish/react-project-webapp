@@ -47,12 +47,12 @@ jobs:
       
       - name: Build Docker Image Serice1
         run: |
-          cd /backend/service1
+          cd backend/service1
           docker build -t ReactprojectWebapp/service1:${{ github.run_id }} .
 
       - name: Build Docker Image Serice2
         run: |
-          cd /backend/service2
+          cd backend/service2
           docker build -t ReactprojectWebapp/service2:${{ github.run_id }} .
 
   DockerHub:
