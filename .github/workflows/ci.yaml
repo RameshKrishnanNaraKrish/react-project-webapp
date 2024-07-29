@@ -100,4 +100,5 @@ jobs:
             git config --global user.name "Ramesh krishnan"
             git add helm/react-web-app-chart/values.yaml
             git commit -m "Update tag in Helm chart"
-            git push  
+            git push
+            
