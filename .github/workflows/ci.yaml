@@ -10,7 +10,7 @@ on:
 
 jobs:
   build:
-    name: Build, Test, and Deploy
+    name: Build
     runs-on: ubuntu-latest
 
     steps:
@@ -22,15 +22,21 @@ jobs:
         with:
           node-version: '18'
 
-      - name: Install dependencies and Build Docker Images
+      - name: Install dependencies frontend
         run: |
           cd frontend
           npm install
           npm audit fix --force
-          cd ../backend/service1
+
+      - name: Install dependencies service1
+        run: |
+          cd backend/service1
           npm install
           npm audit fix --force
-          cd ../service2
+
+      - name: Install dependencies service2
+        run: |
+          cd backend/service2
           npm install
           npm audit fix --force
 
@@ -104,4 +110,3 @@ jobs:
             git add helm/react-web-app-chart/values.yaml
             git commit -m "Update tag in Helm chart"
             git push
-            
