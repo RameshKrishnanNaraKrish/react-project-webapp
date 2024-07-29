@@ -27,10 +27,10 @@ jobs:
           cd frontend
           npm install
           npm audit fix --force
-          cd ../service1
+          cd ../backend/service1
           npm install
           npm audit fix --force
-          cd ../service2
+          cd ../backend/service2
           npm install
           npm audit fix --force
 
