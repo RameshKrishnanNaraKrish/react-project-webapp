@@ -67,9 +67,9 @@ jobs:
             password: ${{ secrets.DOCKER_PASSWORD }}   
       - name: Push Docker Images
         run: |
-          docker push ${{ secrets.DOCKERHUB_USERNAME }}/reactprojectwebapp/service1:${{ github.run_id }}
-          docker push ${{ secrets.DOCKERHUB_USERNAME }}/reactprojectwebapp/service2:${{ github.run_id }}
-          docker push ${{ secrets.DOCKERHUB_USERNAME }}/reactprojectwebapp/frontend:${{ github.run_id }}
+          docker push reactprojectwebapp/service1:${{ github.run_id }}
+          docker push reactprojectwebapp/service2:${{ github.run_id }}
+          docker push reactprojectwebapp/frontend:${{ github.run_id }}
 
   sonarcloud:
         name: SonarCloud
@@ -96,11 +96,11 @@ jobs:
         - name: Update Helm Values
           run: |
             helm upgrade myapp ./charts/myapp \
-              --set image.service1.repository=rameshkrishnannarakrish/reactprojectwebapp/service1 \
+              --set image.service1.repository=reactprojectwebapp/service1 \
               --set image.service1.tag=${{ github.run_id }} \
-              --set image.service2.repository=rameshkrishnannarakrish/reactprojectwebapp/service2 \
+              --set image.service2.repository=reactprojectwebapp/service2 \
               --set image.service2.tag=${{ github.run_id }} \
-              --set image.frontend.repository=rameshkrishnannarakrish/reactprojectwebapp/frontend \
+              --set image.frontend.repository=reactprojectwebapp/frontend \
               --set image.frontend.tag=${{ github.run_id }}
 
         - name: Commit and push changes
