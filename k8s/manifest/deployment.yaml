@@ -14,6 +14,6 @@ spec:
     spec:
       containers:
       - name: frontend
-        image: 123456789012.dkr.ecr.us-west-2.amazonaws.com/myrepo/frontend:latest
+        image: rameshkrishnannarakrish/reactprojectwebapp_frontend:v1
         ports:
         - containerPort: 3000

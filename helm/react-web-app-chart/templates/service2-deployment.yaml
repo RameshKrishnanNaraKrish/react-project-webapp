@@ -14,6 +14,6 @@ spec:
     spec:
       containers:
       - name: service2
-        image: rameshkrishnannarakrish/ReactprojectWebapp/service2:{{ .Values.image.service2.tag }}
+        image: rameshkrishnannarakrish/reactprojectwebapp_service2:{{ .Values.image.service2.tag }}
         ports:
         - containerPort: 3001
