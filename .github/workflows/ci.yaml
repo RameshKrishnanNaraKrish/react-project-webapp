@@ -71,7 +71,7 @@ jobs:
         uses: docker/build-push-action@v6
         with:
             context: .
-            file: cd frontend/Dockerfile
+            file: ./frontend/Dockerfile
             push: true
             tags: |
               ${{ secrets.DOCKER_USERNAME }}/reactprojectwebapp_frontend:${{ github.run_id }}
@@ -80,7 +80,7 @@ jobs:
         uses: docker/build-push-action@v6
         with:
           context: .
-          file: cd backend/service1/Dockerfile
+          file: ./backend/service1/Dockerfile
           push: true
           tags: |
               ${{ secrets.DOCKER_USERNAME }}/reactprojectwebapp_service1:${{ github.run_id }}
