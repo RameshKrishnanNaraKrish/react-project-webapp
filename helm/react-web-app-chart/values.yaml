@@ -7,12 +7,15 @@ replicaCount: 1
 image:
   service1:
     repository: rameshkrishnannarakrish/reactprojectwebapp_service1
+    pullPolicy: IfNotPresent
     tag: ""
   service2:
     repository: rameshkrishnannarakrish/reactprojectwebapp_service2
+    pullPolicy: IfNotPresent
     tag: ""
   frontend:
     repository: rameshkrishnannarakrish/reactprojectwebapp__frontend
+    pullPolicy: IfNotPresent
     tag: ""
 
 imagePullSecrets: []
