@@ -6,13 +6,13 @@ replicaCount: 1
 
 image:
   service1:
-    repository: rameshkrishnannarakrish/ReactprojectWebapp/service1
+    repository: rameshkrishnannarakrish/reactprojectwebapp_service1
     tag: ""
   service2:
-    repository: rameshkrishnannarakrish/ReactprojectWebapp/service2
+    repository: rameshkrishnannarakrish/reactprojectwebapp_service2
     tag: ""
   frontend:
-    repository: rameshkrishnannarakrish/ReactprojectWebapp/frontend
+    repository: rameshkrishnannarakrish/reactprojectwebapp__frontend
     tag: ""
 
 imagePullSecrets: []
