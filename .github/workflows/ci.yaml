@@ -107,9 +107,12 @@ jobs:
 
         - name: Update Helm Values
           run: |
-            sed -i 's/\(repository: rameshkrishnannarakrish\/reactprojectwebapp_service1\n    tag: \).*/\1"${{github.run_id}}"/' helm/react-web-app-chart/values.yaml
-            sed -i 's/\(repository: rameshkrishnannarakrish\/reactprojectwebapp_service2\n    tag: \).*/\1"${{github.run_id}}"/' helm/react-web-app-chart/values.yaml
-            sed -i 's/\(repository: rameshkrishnannarakrish\/reactprojectwebapp_frontend\n    tag: \).*/\1"${{github.run_id}}"/' helm/react-web-app-chart/values.yaml
+            IMAGE_TAG= ${{ github.run_id }}
+            echo "Updating image tags to $IMAGE_TAG in values.yaml"
+            sed -i "s|repository: rameshkrishnannarakrish/reactprojectwebapp_service1\n  tag:.*|repository: rameshkrishnannarakrish/reactprojectwebapp_service1\n  tag: ${IMAGE_TAG}|" helm/react-web-app-chart/values.yaml
+            sed -i "s|repository: rameshkrishnannarakrish/reactprojectwebapp_service2\n  tag:.*|repository: rameshkrishnannarakrish/reactprojectwebapp_service2\n  tag: ${IMAGE_TAG}|" helm/react-web-app-chart/values.yaml
+            sed -i "s|repository: rameshkrishnannarakrish/reactprojectwebapp_frontend\n  tag:.*|repository: rameshkrishnannarakrish/reactprojectwebapp_frontend\n  tag: ${IMAGE_TAG}|" helm/react-web-app-chart/values.yaml
+
 
         - name: Commit and push changes
           run: |
