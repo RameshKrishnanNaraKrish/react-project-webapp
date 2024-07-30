@@ -107,9 +107,9 @@ jobs:
 
         - name: Update Helm Values
           run: |
-            sed -i 's/\(repository: rameshkrishnannarakrish/ReactprojectWebapp_service1\n    tag: \).*/\1"${{github.run_id}}"/' helm/react-web-app-chart/values.yaml
-            sed -i 's/\(repository: rameshkrishnannarakrish/ReactprojectWebapp_service2\n    tag: \).*/\1"${{github.run_id}}"/' helm/react-web-app-chart/values.yaml
-            sed -i 's/\(repository: rameshkrishnannarakrish/ReactprojectWebapp_frontend\n    tag: \).*/\1"${{github.run_id}}"/' helm/react-web-app-chart/values.yaml
+            sed -i 's/\(repository: rameshkrishnannarakrish\/reactprojectwebapp_service1\n    tag: \).*/\1"${{github.run_id}}"/' helm/react-web-app-chart/values.yaml
+            sed -i 's/\(repository: rameshkrishnannarakrish\/reactprojectwebapp_service2\n    tag: \).*/\1"${{github.run_id}}"/' helm/react-web-app-chart/values.yaml
+            sed -i 's/\(repository: rameshkrishnannarakrish\/reactprojectwebapp_frontend\n    tag: \).*/\1"${{github.run_id}}"/' helm/react-web-app-chart/values.yaml
 
         - name: Commit and push changes
           run: |
