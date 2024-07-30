@@ -40,21 +40,6 @@ jobs:
           npm install
           npm audit fix --force
 
-      - name: Buil Docker Image frontend
-        run: |
-          cd frontend
-          docker build -t reactprojectwebapp_frontend:${{ github.run_id }} .
-      
-      - name: Build Docker Image Serice1
-        run: |
-          cd backend/service1
-          docker build -t reactprojectwebapp_service1:${{ github.run_id }} .
-
-      - name: Build Docker Image Serice2
-        run: |
-          cd backend/service2
-          docker build -t reactprojectwebapp_service2:${{ github.run_id }} .
-
   DockerHub:
     name: Docker Login
     needs: build
@@ -83,7 +68,7 @@ jobs:
       - name: Push Docker Image service1
         uses: docker/build-push-action@v6
         with:
-          context: .
+          context: ./backend/service1
           file: ./backend/service1/Dockerfile
           push: true
           tags: |
