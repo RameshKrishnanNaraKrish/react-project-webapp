@@ -107,17 +107,15 @@ jobs:
 
         - name: Update Helm Values
           run: |
-            IMAGE_TAG= ${{ github.run_id }}
-            echo "Updating image tags to $IMAGE_TAG in values.yaml"
-            sed -i "s|repository: rameshkrishnannarakrish/reactprojectwebapp_service1\n  tag:.*|repository: rameshkrishnannarakrish/reactprojectwebapp_service1\n  tag: ${IMAGE_TAG}|" helm/react-web-app-chart/values.yaml
-            sed -i "s|repository: rameshkrishnannarakrish/reactprojectwebapp_service2\n  tag:.*|repository: rameshkrishnannarakrish/reactprojectwebapp_service2\n  tag: ${IMAGE_TAG}|" helm/react-web-app-chart/values.yaml
-            sed -i "s|repository: rameshkrishnannarakrish/reactprojectwebapp_frontend\n  tag:.*|repository: rameshkrishnannarakrish/reactprojectwebapp_frontend\n  tag: ${IMAGE_TAG}|" helm/react-web-app-chart/values.yaml
+            sed -i "s|repository: rameshkrishnannarakrish/reactprojectwebapp_service1\n  tag:.*|repository: rameshkrishnannarakrish/reactprojectwebapp_service1\n  tag: ${{ github.run_id }}}|" helm/react-web-app-chart/values.yaml
+            sed -i "s|repository: rameshkrishnannarakrish/reactprojectwebapp_service2\n  tag:.*|repository: rameshkrishnannarakrish/reactprojectwebapp_service2\n  tag: ${{ github.run_id }}|" helm/react-web-app-chart/values.yaml
+            sed -i "s|repository: rameshkrishnannarakrish/reactprojectwebapp_frontend\n  tag:.*|repository: rameshkrishnannarakrish/reactprojectwebapp_frontend\n  tag: ${{ github.run_id }}|" helm/react-web-app-chart/values.yaml
 
 
         - name: Commit and push changes
           run: |
-            git config --global user.email "ramesh@gmail.com"
-            git config --global user.name "Ramesh krishnan"
+            git config --global user.email "actions@github.com"
+            git config --global user.name "GitHub Actions"
             git add helm/react-web-app-chart/values.yaml
             git commit -m "Update tag in Helm chart"
             git push
