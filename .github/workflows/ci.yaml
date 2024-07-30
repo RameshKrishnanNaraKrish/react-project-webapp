@@ -70,7 +70,7 @@ jobs:
       - name: Push Docker Image fontend
         uses: docker/build-push-action@v6
         with:
-            context: ./frontend
+            context: .
             file: ./frontend/Dockerfile
             push: true
             tags: |
