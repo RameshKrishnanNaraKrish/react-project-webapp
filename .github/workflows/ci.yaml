@@ -67,15 +67,31 @@ jobs:
             password: ${{ secrets.DOCKER_PASSWORD }}
             
             
-      - name: Push Docker Images
+      - name: Push Docker Image fontend
         uses: docker/build-push-action@v6
         with:
-            context: .
-            file: ./Dockerfile
+            context: ./frontend
+            file: ./frontend/Dockerfile
             push: true
             tags: |
               ${{ secrets.DOCKER_USERNAME }}/reactprojectwebapp_frontend:${{ github.run_id }}
+
+      - name: Push Docker Image service1
+        uses: docker/build-push-action@v6
+        with:
+          context: ./backend/service1
+          file: ./backend/service1/Dockerfile
+          push: true
+          tags: |
               ${{ secrets.DOCKER_USERNAME }}/reactprojectwebapp_service1:${{ github.run_id }}
+
+      - name: Push Docker Image service1
+        uses: docker/build-push-action@v6
+        with:
+          context: ./backend/service2
+          file: ./backend/service2/Dockerfile
+          push: true
+          tags: |
               ${{ secrets.DOCKER_USERNAME }}/reactprojectwebapp_service2:${{ github.run_id }}
 
   sonarcloud:
