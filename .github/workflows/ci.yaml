@@ -67,12 +67,12 @@ jobs:
             password: ${{ secrets.DOCKER_PASSWORD }}   
       - name: Push Docker Images
         run: |
-          docker tag reactprojectwebapp_frontend:${{ github.run_id }} rameshkrishnannarakrish/reactprojectwebapp_frontend:${{ github.run_id }}
-          docker tag reactprojectwebapp/service1:${{ github.run_id }} rameshkrishnannarakrish/reactprojectwebapp_service1:${{ github.run_id }}
-          docker tag reactprojectwebapp/service2:${{ github.run_id }} rameshkrishnannarakrish/reactprojectwebapp_service2:${{ github.run_id }}
-          docker push rameshkrishnannarakrish/reactprojectwebapp_service1:${{ github.run_id }}
-          docker push rameshkrishnannarakrish/reactprojectwebapp_service2:${{ github.run_id }}
-          docker push rameshkrishnannarakrish/reactprojectwebapp_frontend:${{ github.run_id }}
+          docker tag reactprojectwebapp_frontend:${{ github.run_id }} ${{ secrets.DOCKER_USERNAME }}/reactprojectwebapp_frontend:${{ github.run_id }}
+          docker tag reactprojectwebapp_service1:${{ github.run_id }} ${{ secrets.DOCKER_USERNAME }}/reactprojectwebapp_service1:${{ github.run_id }}
+          docker tag reactprojectwebapp_service2:${{ github.run_id }} ${{ secrets.DOCKER_USERNAME }}/reactprojectwebapp_service2:${{ github.run_id }}
+          docker push ${{ secrets.DOCKER_USERNAME }}/reactprojectwebapp_service1:${{ github.run_id }}
+          docker push ${{ secrets.DOCKER_USERNAME }}/reactprojectwebapp_service2:${{ github.run_id }}
+          docker push ${{ secrets.DOCKER_USERNAME }}/reactprojectwebapp_frontend:${{ github.run_id }}
 
   sonarcloud:
         name: SonarCloud
