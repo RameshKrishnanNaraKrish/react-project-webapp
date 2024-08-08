@@ -5,9 +5,6 @@ env:
     NODE_ENV: production
     S3_BUCKET: s3://blue-green-deployment-react-webapp/Blue/
     CLOUDFRONT_DISTRIBUTION_ID: E239SDFT2PCFRS
-  secrets-manager:
-    # Example: SECRET_KEY: your-secret-key
-    # Add secrets if required from AWS Secrets Manager
 
 phases:
   install:
