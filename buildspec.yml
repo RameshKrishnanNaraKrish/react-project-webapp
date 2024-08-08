@@ -1,11 +1,5 @@
 version: 0.2
 
-env:
-  variables:
-    NODE_ENV: production
-    S3_BUCKET: s3://blue-green-deployment-react-webapp/Blue/
-    CLOUDFRONT_DISTRIBUTION_ID: E239SDFT2PCFRS
-
 phases:
   install:
     runtime-versions:
@@ -13,30 +7,19 @@ phases:
     commands:
       - echo Installing dependencies...
       - npm install
-
   pre_build:
     commands:
       - echo Running pre-build scripts...
+      - npm run lint
       - npm run test
-
   build:
     commands:
       - echo Building the application...
       - npm run build
-      - echo Packaging the application...
-      - aws s3 sync build/ s3://$S3_BUCKET --delete
-      - echo Invalidating CloudFront cache...
-      - aws cloudfront create-invalidation --distribution-id $CLOUDFRONT_DISTRIBUTION_ID --paths "/*"
-
   post_build:
     commands:
-      - echo Post-build actions...
-      - echo Deploying with CodeDeploy...
-      - aws deploy create-deployment \
-          --application-name your-codedeploy-application \
-          --deployment-config-name CodeDeployDefault.OneAtATime \
-          --deployment-group-name your-deployment-group \
-          --s3-location bucket=$S3_BUCKET,key=build,bundleType=zip
+      - echo Running post-build scripts...
+      - npm run deploy
 
 artifacts:
   files:
@@ -46,4 +29,4 @@ artifacts:
 
 cache:
   paths:
-    - 'node_modules/**/*'
+    - node_modules/**/*
