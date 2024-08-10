@@ -17,16 +17,6 @@ pipeline {
             }
         }
 
-        stage('Set up Node.js') {
-            steps {
-                script {
-                    def nodeVersion = '14'
-                    sh "npm install ${nodeVersion}"
-                    sh "npm use ${nodeVersion}"
-                }
-            }
-        }
-
         stage('Install dependencies frontend') {
             steps {
                 dir('frontend') {
