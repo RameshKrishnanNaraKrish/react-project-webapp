@@ -21,8 +21,8 @@ pipeline {
             steps {
                 script {
                     def nodeVersion = '14'
-                    sh "nvm install ${nodeVersion}"
-                    sh "nvm use ${nodeVersion}"
+                    sh "npm install ${nodeVersion}"
+                    sh "npm use ${nodeVersion}"
                 }
             }
         }
