@@ -20,7 +20,7 @@ pipeline {
         stage('Set up Node.js') {
             steps {
                 script {
-                    def nodeVersion = '17'
+                    def nodeVersion = '14'
                     sh "nvm install ${nodeVersion}"
                     sh "nvm use ${nodeVersion}"
                 }
