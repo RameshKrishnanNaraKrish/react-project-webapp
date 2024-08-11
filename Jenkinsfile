@@ -21,7 +21,7 @@ pipeline {
             steps {
                 script {
                     sh '''
-                    sudo curl -sL https://deb.nodesource.com/setup_16.x | sudo -E bash -
+                    sudo curl -sL https://deb.nodesource.com/setup_17.x | sudo -E bash -
                     sudo apt-get install -y nodejs
                     '''
                 }
@@ -32,6 +32,7 @@ pipeline {
             steps {
                 dir('frontend') {
                     sh 'npm install'
+                    sh 'npm run build'
                     sh 'npm audit fix --force'
                 }
             }
@@ -40,7 +41,7 @@ pipeline {
         stage('Install dependencies service1') {
             steps {
                 dir('backend/service1') {
-                    sh 'npm install'
+                    sh 'npm run build'
                     sh 'npm audit fix --force'
                 }
             }
@@ -49,7 +50,7 @@ pipeline {
         stage('Install dependencies service2') {
             steps {
                 dir('backend/service2') {
-                    sh 'npm install'
+                    sh 'npm run build'
                     sh 'npm audit fix --force'
                 }
             }
