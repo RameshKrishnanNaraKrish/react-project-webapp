@@ -41,7 +41,6 @@ pipeline {
             steps {
                 dir('backend/service1') {
                     sh 'npm install'
-                    sh 'npm run build'
                 }
             }
         }
@@ -50,7 +49,6 @@ pipeline {
             steps {
                 dir('backend/service2') {
                     sh 'npm install'
-                    sh 'npm run build'
                 }
             }
         }
