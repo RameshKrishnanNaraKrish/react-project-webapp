@@ -16,4 +16,4 @@ spec:
       - name: service1
         image: rameshkrishnannarakrish/reactprojectwebapp_service1:v1
         ports:
-        - containerPort: 3000
+        - containerPort: 3001
