@@ -2,16 +2,16 @@ const express = require('express');
 const mysql = require('mysql');
 const cors = require('cors');
 const app = express();
-const port = 3001;
+const port = 3002;
 
 app.use(cors());
 app.use(express.json());
 
 const db = mysql.createConnection({
-  host: 'database-1.cbcg0a6q6sa7.us-east-1.rds.amazonaws.com',
+  host: 'database-2.cbcg0a6q6sa7.us-east-1.rds.amazonaws.com',
   user: 'admin',
-  password: 'Buyd4kDX8LC4KPidyWVt',
-  database: 'database-1'
+  password: 'syciK4VH9NiaFLPVNThd',
+  database: 'webappdb'
 });
 
 db.connect((err) => {

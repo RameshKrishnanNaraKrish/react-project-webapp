@@ -1,6 +1,6 @@
-// src/App.js
 import React, { useState, useEffect } from 'react';
 import './App.css';
+import config from './config';
 
 function App() {
   const [users, setUsers] = useState([]);
@@ -11,17 +11,17 @@ function App() {
   const [newProductPrice, setNewProductPrice] = useState('');
 
   useEffect(() => {
-    fetch('/api/users')
+    fetch(`${config.API_BASE_URL_USERS}/users`)  // Corrected template literal
       .then(response => response.json())
       .then(data => setUsers(data));
 
-    fetch('/api/products')
+    fetch(`${config.API_BASE_URL_PRODUCTS}/products`)  // Corrected template literal
       .then(response => response.json())
       .then(data => setProducts(data));
   }, []);
 
   const handleAddUser = () => {
-    fetch('/api/users', {
+    fetch(`${config.API_BASE_URL_USERS}/users`, {  // Corrected template literal
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ name: newUserName, email: newUserEmail }),
@@ -31,11 +31,14 @@ function App() {
         setUsers([...users, user]);
         setNewUserName('');
         setNewUserEmail('');
+      })
+      .catch(error => {
+        console.error('Error adding user:', error);
       });
   };
 
   const handleAddProduct = () => {
-    fetch('/api/products', {
+    fetch(`${config.API_BASE_URL_PRODUCTS}/products`, {  // Corrected template literal
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ name: newProductName, price: parseFloat(newProductPrice) }),
@@ -45,6 +48,9 @@ function App() {
         setProducts([...products, product]);
         setNewProductName('');
         setNewProductPrice('');
+      })
+      .catch(error => {
+        console.error('Error adding product:', error);
       });
   };
 
