@@ -40,6 +40,7 @@ pipeline {
         stage('Install dependencies service1') {
             steps {
                 dir('backend/service1') {
+                    sh 'npm install'
                     sh 'npm run build'
                 }
             }
@@ -48,6 +49,7 @@ pipeline {
         stage('Install dependencies service2') {
             steps {
                 dir('backend/service2') {
+                    sh 'npm install'
                     sh 'npm run build'
                 }
             }
