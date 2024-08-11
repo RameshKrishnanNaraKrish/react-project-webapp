@@ -8,15 +8,15 @@ image:
   service1:
     repository: rameshkrishnannarakrish/reactprojectwebapp_service1
     pullPolicy: IfNotPresent
-    tag: "10336147125"
+    tag: "10340515194"
   service2:
     repository: rameshkrishnannarakrish/reactprojectwebapp_service2
     pullPolicy: IfNotPresent
-    tag: "10336147125"
+    tag: "10340515194"
   frontend:
     repository: rameshkrishnannarakrish/reactprojectwebapp__frontend
     pullPolicy: IfNotPresent
-    tag: "10336147125"
+    tag: "10340515194"
 
 imagePullSecrets: []
 nameOverride: ""
