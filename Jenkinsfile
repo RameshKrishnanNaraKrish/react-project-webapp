@@ -33,7 +33,6 @@ pipeline {
                 dir('frontend') {
                     sh 'npm install'
                     sh 'npm run build'
-                    sh 'npm audit fix --force'
                 }
             }
         }
@@ -42,7 +41,6 @@ pipeline {
             steps {
                 dir('backend/service1') {
                     sh 'npm run build'
-                    sh 'npm audit fix --force'
                 }
             }
         }
@@ -51,7 +49,6 @@ pipeline {
             steps {
                 dir('backend/service2') {
                     sh 'npm run build'
-                    sh 'npm audit fix --force'
                 }
             }
         }
