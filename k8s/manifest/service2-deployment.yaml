@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   name: service2
 spec:
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
       app: service2
@@ -14,6 +14,6 @@ spec:
     spec:
       containers:
       - name: service2
-        image: rameshkrishnannarakrish/reactprojectwebapp_service2:v1
+        image: rameshkrishnannarakrish/reactprojectwebapp_service2:10342739826
         ports:
         - containerPort: 3002
