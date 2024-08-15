@@ -29,17 +29,17 @@ phases:
       - echo Building the application...
       - echo "$DOCKER_REGISTRY_PASSWORD" | docker login -u "$DOCKER_REGISTRY_USERNAME" --password-stdin "$DOCKER_REGISTRY_URL"
       - echo Building the application...
-      - docker build -t "$DOCKER_REGISTRY_URL/$DOCKER_REGISTRY_USERNAME/service1:$CODEBUILD_BUILD_NUMBER" .
-      - docker push "$DOCKER_REGISTRY_URL/$DOCKER_REGISTRY_USERNAME/service1:$CODEBUILD_BUILD_NUMBER"
+      - docker build -t "$DOCKER_REGISTRY_URL/$DOCKER_REGISTRY_USERNAME/reactprojectwebapp_service2:$CODEBUILD_BUILD_NUMBER" .
+      - docker push "$DOCKER_REGISTRY_URL/$DOCKER_REGISTRY_USERNAME/reactprojectwebapp_service2:$CODEBUILD_BUILD_NUMBER"
       - echo Building the application...
       - cd ../service1
       - echo Building the application...
-      - docker build -t "$DOCKER_REGISTRY_URL/$DOCKER_REGISTRY_USERNAME/service2:$CODEBUILD_BUILD_NUMBER" .
-      - docker push "$DOCKER_REGISTRY_URL/$DOCKER_REGISTRY_USERNAME/service2:$CODEBUILD_BUILD_NUMBER"
+      - docker build -t "$DOCKER_REGISTRY_URL/$DOCKER_REGISTRY_USERNAME/reactprojectwebapp_service1:$CODEBUILD_BUILD_NUMBER" .
+      - docker push "$DOCKER_REGISTRY_URL/$DOCKER_REGISTRY_USERNAME/reactprojectwebapp_service1:$CODEBUILD_BUILD_NUMBER"
       - cd ../../frontend
       - echo Building the application...
-      - docker build -t "$DOCKER_REGISTRY_URL/$DOCKER_REGISTRY_USERNAME/service2:$CODEBUILD_BUILD_NUMBER" .
-      - docker push "$DOCKER_REGISTRY_URL/$DOCKER_REGISTRY_USERNAME/frontend:$CODEBUILD_BUILD_NUMBER"
+      - docker build -t "$DOCKER_REGISTRY_URL/$DOCKER_REGISTRY_USERNAME/reactprojectwebapp_frontend:$CODEBUILD_BUILD_NUMBER" .
+      - docker push "$DOCKER_REGISTRY_URL/$DOCKER_REGISTRY_USERNAME/reactprojectwebapp_frontend:$CODEBUILD_BUILD_NUMBER"
 
   post_build:
     commands:
