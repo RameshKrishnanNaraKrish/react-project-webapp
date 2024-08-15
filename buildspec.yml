@@ -1,0 +1,54 @@
+version: 0.2
+
+env:
+  parameter-store:
+    DOCKER_REGISTRY_USERNAME: /myapp/docker-credentials/username
+    DOCKER_REGISTRY_PASSWORD: /myapp/docker-credentials/password
+    DOCKER_REGISTRY_URL: /myapp/docker-registry/url
+
+phases:
+  install:
+    runtime-versions:
+      nodejs: 17
+    commands:
+      - echo Installing dependencies...
+      - npm install
+
+  pre_build:
+    commands:
+      - echo Running pre-build scripts...
+      - npm run test
+
+  build:
+    commands:
+      - echo Building the application...
+      - echo "$DOCKER_REGISTRY_PASSWORD" | docker login -u "$DOCKER_REGISTRY_USERNAME" --password-stdin "$DOCKER_REGISTRY_URL"
+      - cd backend/service1
+      - echo Building the application...
+      - docker build -t "$DOCKER_REGISTRY_URL/$DOCKER_REGISTRY_USERNAME/service1:$CODEBUILD_BUILD_ID" .
+      - docker push "$DOCKER_REGISTRY_URL/$DOCKER_REGISTRY_USERNAME/service1:$CODEBUILD_BUILD_ID"
+      - echo Building the application...
+      - cd ../service2
+      - echo Building the application...
+      - docker build -t "$DOCKER_REGISTRY_URL/$DOCKER_REGISTRY_USERNAME/service2:$CODEBUILD_BUILD_ID" .
+      - docker push "$DOCKER_REGISTRY_URL/$DOCKER_REGISTRY_USERNAME/service2:$CODEBUILD_BUILD_ID"
+      - cd ../../frontend
+      - echo Building the application...
+      - docker build -t "$DOCKER_REGISTRY_URL/$DOCKER_REGISTRY_USERNAME/service2:$CODEBUILD_BUILD_ID" .
+      - docker push "$DOCKER_REGISTRY_URL/$DOCKER_REGISTRY_USERNAME/frontend:$CODEBUILD_BUILD_ID"
+
+  post_build:
+    commands:
+      - echo "Build completed successfully!"
+      - echo Build completed on `date`
+      - echo Updating Helm chart values with the new image tag...
+      - sed -i "s|tag:.*|tag:$CODEBUILD_BUILD_ID|" helm/react-web-app-chart/values.yaml
+
+artifacts:
+  files:
+    - '**/*'
+  base-directory: ../react-project-webapp
+
+cache:
+  paths:
+    - 'node_modules/**/*'
