@@ -52,7 +52,7 @@ phases:
 artifacts:
   files:
     - '**/*'
-  base-directory: react-project-webapp
+  base-directory: ../react-project-webapp
 
 cache:
   paths:
