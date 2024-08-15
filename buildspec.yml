@@ -28,12 +28,12 @@ phases:
     commands:
       - echo Building the application...
       - echo "$DOCKER_REGISTRY_PASSWORD" | docker login -u "$DOCKER_REGISTRY_USERNAME" --password-stdin "$DOCKER_REGISTRY_URL"
-      - cd backend/service1
+      - cd service2..."
       - echo Building the application...
       - docker build -t "$DOCKER_REGISTRY_URL/$DOCKER_REGISTRY_USERNAME/service1:$CODEBUILD_BUILD_ID" .
       - docker push "$DOCKER_REGISTRY_URL/$DOCKER_REGISTRY_USERNAME/service1:$CODEBUILD_BUILD_ID"
       - echo Building the application...
-      - cd ../service2
+      - cd ../service1
       - echo Building the application...
       - docker build -t "$DOCKER_REGISTRY_URL/$DOCKER_REGISTRY_USERNAME/service2:$CODEBUILD_BUILD_ID" .
       - docker push "$DOCKER_REGISTRY_URL/$DOCKER_REGISTRY_USERNAME/service2:$CODEBUILD_BUILD_ID"
