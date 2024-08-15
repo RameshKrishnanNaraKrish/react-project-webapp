@@ -29,24 +29,24 @@ phases:
       - echo Building the application...
       - echo "$DOCKER_REGISTRY_PASSWORD" | docker login -u "$DOCKER_REGISTRY_USERNAME" --password-stdin "$DOCKER_REGISTRY_URL"
       - echo Building the application...
-      - docker build -t "$DOCKER_REGISTRY_URL/$DOCKER_REGISTRY_USERNAME/service1:$CODEBUILD_BUILD_ID" .
-      - docker push "$DOCKER_REGISTRY_URL/$DOCKER_REGISTRY_USERNAME/service1:$CODEBUILD_BUILD_ID"
+      - docker build -t "$DOCKER_REGISTRY_URL/$DOCKER_REGISTRY_USERNAME/service1:$CODEBUILD_BUILD_NUMBER" .
+      - docker push "$DOCKER_REGISTRY_URL/$DOCKER_REGISTRY_USERNAME/service1:$CODEBUILD_BUILD_NUMBER"
       - echo Building the application...
       - cd ../service1
       - echo Building the application...
-      - docker build -t "$DOCKER_REGISTRY_URL/$DOCKER_REGISTRY_USERNAME/service2:$CODEBUILD_BUILD_ID" .
-      - docker push "$DOCKER_REGISTRY_URL/$DOCKER_REGISTRY_USERNAME/service2:$CODEBUILD_BUILD_ID"
+      - docker build -t "$DOCKER_REGISTRY_URL/$DOCKER_REGISTRY_USERNAME/service2:$CODEBUILD_BUILD_NUMBER" .
+      - docker push "$DOCKER_REGISTRY_URL/$DOCKER_REGISTRY_USERNAME/service2:$CODEBUILD_BUILD_NUMBER"
       - cd ../../frontend
       - echo Building the application...
-      - docker build -t "$DOCKER_REGISTRY_URL/$DOCKER_REGISTRY_USERNAME/service2:$CODEBUILD_BUILD_ID" .
-      - docker push "$DOCKER_REGISTRY_URL/$DOCKER_REGISTRY_USERNAME/frontend:$CODEBUILD_BUILD_ID"
+      - docker build -t "$DOCKER_REGISTRY_URL/$DOCKER_REGISTRY_USERNAME/service2:$CODEBUILD_BUILD_NUMBER" .
+      - docker push "$DOCKER_REGISTRY_URL/$DOCKER_REGISTRY_USERNAME/frontend:$CODEBUILD_BUILD_NUMBER"
 
   post_build:
     commands:
       - echo "Build completed successfully!"
       - echo Build completed on `date`
       - echo Updating Helm chart values with the new image tag...
-      - sed -i "s|tag:.*|tag:$CODEBUILD_BUILD_ID|" helm/react-web-app-chart/values.yaml
+      - sed -i "s|tag:.*|tag:$CODEBUILD_BUILD_NUMBER|" helm/react-web-app-chart/values.yaml
 
 artifacts:
   files:
