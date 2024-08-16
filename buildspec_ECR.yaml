@@ -6,6 +6,9 @@ env:
     DOCKER_REGISTRY_PASSWORD: /myapp/docker-credentials/password
     DOCKER_REGISTRY_URL: /myapp/docker-registry/url
     GIT_TOKEN: /myapp/git-token
+  variables:
+    AWS_ACCOUNT_ID: "730335412393"
+    AWS_DEFAULT_REGION: "us-east-1"
 
 phases:
   install:
@@ -28,26 +31,28 @@ phases:
   build:
     commands:
       - echo Building the application...
-      - echo "$DOCKER_REGISTRY_PASSWORD" | docker login -u "$DOCKER_REGISTRY_USERNAME" --password-stdin "$DOCKER_REGISTRY_URL"
+      - aws ecr-public get-login-password --region $AWS_DEFAULT_REGION | docker login --username AWS --password-stdin public.ecr.aws
       - echo Building the application...
-      - docker build -t "$DOCKER_REGISTRY_URL/$DOCKER_REGISTRY_USERNAME/reactprojectwebapp_service2:$CODEBUILD_BUILD_NUMBER" .
-      - docker push "$DOCKER_REGISTRY_URL/$DOCKER_REGISTRY_USERNAME/reactprojectwebapp_service2:$CODEBUILD_BUILD_NUMBER"
+      - docker build -t reactprojectwebapp_service2:$CODEBUILD_BUILD_NUMBER .
+      - docker tag reactprojectwebapp_service2:$CODEBUILD_BUILD_NUMBER public.ecr.aws/l1b1a8r4/reactprojectwebapp_service2:$CODEBUILD_BUILD_NUMBER
+      - docker push public.ecr.aws/l1b1a8r4/reactprojectwebapp_service2:$CODEBUILD_BUILD_NUMBER
       - echo Building the application...
       - cd ../service1
       - echo Building the application...
-      - docker build -t "$DOCKER_REGISTRY_URL/$DOCKER_REGISTRY_USERNAME/reactprojectwebapp_service1:$CODEBUILD_BUILD_NUMBER" .
-      - docker push "$DOCKER_REGISTRY_URL/$DOCKER_REGISTRY_USERNAME/reactprojectwebapp_service1:$CODEBUILD_BUILD_NUMBER"
+      - docker build -t reactprojectwebapp_service1:$CODEBUILD_BUILD_NUMBER .
+      - docker tag reactprojectwebapp_service1:$CODEBUILD_BUILD_NUMBER public.ecr.aws/l1b1a8r4/reactprojectwebapp_service1:$CODEBUILD_BUILD_NUMBER
+      - docker push public.ecr.aws/l1b1a8r4/reactprojectwebapp_service1:$CODEBUILD_BUILD_NUMBER
       - cd ../../frontend
       - echo Building the application...
-      - docker build -t "$DOCKER_REGISTRY_URL/$DOCKER_REGISTRY_USERNAME/reactprojectwebapp_frontend:$CODEBUILD_BUILD_NUMBER" .
-      - docker push "$DOCKER_REGISTRY_URL/$DOCKER_REGISTRY_USERNAME/reactprojectwebapp_frontend:$CODEBUILD_BUILD_NUMBER"
+      - docker build -t reactprojectwebapp_frontend:$CODEBUILD_BUILD_NUMBER .
+      - docker tag reactprojectwebapp_frontend:$CODEBUILD_BUILD_NUMBER public.ecr.aws/l1b1a8r4/reactprojectwebapp_frontend:$CODEBUILD_BUILD_NUMBER
+      - docker push public.ecr.aws/l1b1a8r4/reactprojectwebapp_frontend:$CODEBUILD_BUILD_NUMBER
 
   post_build:
     commands:
       - echo "Build completed successfully!"
       - echo Build completed on `date`
       - echo Updating Helm chart values with the new image tag...
-      - cd ..
       - cd ..
       - "sed -i 's/tag: .*/tag: \"$CODEBUILD_BUILD_NUMBER\"/' helm/react-web-app-chart/values.yaml"
       - git config --global user.email "codebuild@aws.com"
@@ -59,7 +64,6 @@ phases:
       - git commit -m "Update tag in Helm chart"
       - git remote set-url origin https://$GIT_TOKEN@github.com/RameshKrishnanNaraKrish/react-project-webapp.git
       - git push origin main
-
 
 artifacts:
   files:
