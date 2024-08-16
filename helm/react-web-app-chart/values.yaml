@@ -8,15 +8,15 @@ image:
   service1:
     repository: rameshkrishnannarakrish/reactprojectwebapp_service1
     pullPolicy: IfNotPresent
-    tag: $CODEBUILD_BUILD_NUMBER
+    tag:91
   service2:
     repository: rameshkrishnannarakrish/reactprojectwebapp_service2
     pullPolicy: IfNotPresent
-    tag: $CODEBUILD_BUILD_NUMBER
+    tag:91
   frontend:
     repository: rameshkrishnannarakrish/reactprojectwebapp__frontend
     pullPolicy: IfNotPresent
-    tag: $CODEBUILD_BUILD_NUMBER
+    tag:91
 
 imagePullSecrets: []
 nameOverride: ""
