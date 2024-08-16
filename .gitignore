@@ -1,6 +1,5 @@
 # Node modules
 /node_modules/
-/helm
 
 /frontend/node_modules/
 /backend/service1/node_modules/
