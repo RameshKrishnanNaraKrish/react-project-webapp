@@ -2,11 +2,27 @@ version: 0.0
 os: linux
 
 hooks:
-  ApplicationStop:
-    - location: scripts/stop_container.sh
+  ApplicationStart:
+    - location: scripts/install_helm.sh
       timeout: 300
       runas: root
+
+  BeforeInstall:
+    - location: scripts/pre_install_checks.sh
+      timeout: 300
+      runas: root
+
   AfterInstall:
-    - location: scripts/start_container.sh
+    - location: scripts/helm_deploy.sh
+      timeout: 300
+      runas: root
+
+  ApplicationStop:
+    - location: scripts/cleanup.sh
+      timeout: 300
+      runas: root
+
+  ValidateService:
+    - location: scripts/validate.sh
       timeout: 300
       runas: root
