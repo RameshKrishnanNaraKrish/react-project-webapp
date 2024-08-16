@@ -2,12 +2,10 @@ version: 0.0
 os: linux
 
 hooks:
-  ApplicationStart:
+  BeforeInstall:
     - location: scripts/install_helm.sh
       timeout: 300
       runas: root
-
-  BeforeInstall:
     - location: scripts/pre_install_checks.sh
       timeout: 300
       runas: root
