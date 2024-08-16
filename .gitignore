@@ -16,6 +16,9 @@ yarn-error.log*
 /frontend/node_modules/
 /backend/service1/node_modules/
 /backend/service2/node_modules/
+/backend/service1/package-lock.json
+/backend/service2/package-lock.json
+/frontend/package-lock.json
 
 # Build output
 /frontend/build/
