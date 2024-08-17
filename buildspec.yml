@@ -48,8 +48,10 @@ phases:
       - echo Build completed on `date`
       - echo Updating Helm chart values with the new image tag...
       - cd ..
-      - echo $CODEBUILD_BUILD_NUMBER
-      - sed -i 's|tag:.*|tag:'"$CODEBUILD_BUILD_NUMBER"'|' helm/react-web-app-chart/values.yaml
+      - echo $CODEBUILD_BUILD_NUMBER > temp_build_number.txt
+      - BUILD_NUMBER=$(cat temp_build_number.txt)
+      - sed -i 's|tag:.*|tag:'"$BUILD_NUMBER"'|' helm/react-web-app-chart/values.yaml
+      - rm temp_build_number.txt
       - git config --global user.email "codebuild@aws.com"
       - git config --global user.name "AWS Codebuild"
       - echo "https://$GIT_TOKEN@github.com" > ~/.git-credentials
