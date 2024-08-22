@@ -5,7 +5,7 @@
         "TargetService": {
           "Type": "AWS::ECS::Service",
           "Properties": {
-            "TaskDefinition": "react-web-app-frontend",
+            "TaskDefinition": "arn:aws:ecs:us-east-1:730335412393:task-definition/react-web-app-frontend:21",
             "LoadBalancerInfo": {
               "ContainerName": "reactwebapp-frontend",
               "ContainerPort": 3000
