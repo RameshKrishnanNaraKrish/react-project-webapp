@@ -1,0 +1,18 @@
+{
+    "version": 0.0,
+    "Resources": [
+      {
+        "TargetService": {
+          "Type": "AWS::ECS::Service",
+          "Properties": {
+            "TaskDefinition": "react-web-app-frontend",
+            "LoadBalancerInfo": {
+              "ContainerName": "reactwebapp-frontend",
+              "ContainerPort": 3000
+            }
+          }
+        }
+      }
+    ]
+  }
+  
