@@ -11,6 +11,18 @@ HELM_S3BUCKET_NAME="helms3bucket"
 # Set KUBECONFIG environment variable
 export KUBECONFIG=$KUBECONFIG_PATH
 
+# Check if KUBECONFIG file exists
+if [ ! -f "$KUBECONFIG_PATH" ]; then
+    echo "Kubeconfig file not found at $KUBECONFIG_PATH"
+    exit 1
+fi
+
+# Verify Kubernetes cluster access
+if ! kubectl get nodes >/dev/null 2>&1; then
+    echo "Cannot access Kubernetes cluster. Check kubeconfig."
+    exit 1
+fi
+
 # Deploy the Helm chart
 echo "Deploying Helm chart..."
 helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
