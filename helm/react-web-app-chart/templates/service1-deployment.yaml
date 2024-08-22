@@ -21,12 +21,34 @@ spec:
         - containerPort: {{ .Values.service.service1.targetPort }}
         env:
             - name: API_BASE_URL
-              value: "{{ .Values.env.API_BASE_URL_USERS }}"
+              value: "{{ .Values.env.API_BASE_URL }}"
+            - name: PORT
+              value: "{{ .Values.service.service1.port }}"
+            - name: DB_HOST
+              valueFrom:
+                secretKeyRef:
+                  name: db-credentials
+                  key: db_host
+            - name: DB_USER
+              valueFrom:
+                secretKeyRef:
+                  name: db-credentials
+                  key: db_user
+            - name: DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: db-credentials
+                  key: db_password
+            - name: DB_NAME
+              valueFrom:
+                secretKeyRef:
+                  name: db-credentials
+                  key: db_name
         livenessProbe:
             httpGet:
               path: /
               port: {{ .Values.service.service1.port }}
-          readinessProbe:
+        readinessProbe:
             httpGet:
               path: /
               port: {{ .Values.service.service1.port }}

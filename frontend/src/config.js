@@ -1,6 +1,6 @@
 // src/config.js
 const config = {
-    API_BASE_URL: process.env.API_BASE_URL,
+    API_BASE_URL: "myapp.orgramesh.com"
   };
   
   export default config;
