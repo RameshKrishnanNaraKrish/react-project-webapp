@@ -5,7 +5,7 @@ set -e
 HELM_RELEASE_NAME="react-web-app-chart"
 HELM_CHART_PATH="helm/react-web-app-chart/Blue"
 KUBE_NAMESPACE="default"
-KUBECONFIG_PATH="~/.kube/config"
+KUBECONFIG_PATH="/home/ubuntu/.kube/config"
 HELM_S3BUCKET_NAME="helms3bucket"
 
 # Set KUBECONFIG environment variable
