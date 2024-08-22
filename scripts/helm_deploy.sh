@@ -2,7 +2,7 @@
 set -e
 
 # Variables
-HELM_RELEASE_NAME="react-web-app"
+HELM_RELEASE_NAME="react-web-app-chart"
 HELM_CHART_PATH="helm/react-web-app-chart/Blue"
 KUBE_NAMESPACE="default"
 KUBECONFIG_PATH="/home/ubuntu/.kube/config"
@@ -15,13 +15,13 @@ export KUBECONFIG=$KUBECONFIG_PATH
 echo "Deploying Helm chart..."
 helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
 helm install prometheus prometheus-community/kube-prometheus-stack
-aws s3 cp s3://$HELM_S3BUCKET_NAME/helm/react-web-app-chart/Blue ./helm/react-web-app-chart/Blue/ --recursive || {
+aws s3 cp s3://$HELM_S3BUCKET_NAME/$HELM_CHART_PATH ./$HELM_CHART_PATH --recursive || {
     echo "Failed to download Helm chart values from S3."
     exit 1
 }
 
 # Install or upgrade Helm release
-helm upgrade --install $HELM_RELEASE_NAME $HELM_CHART_PATH --namespace $KUBE_NAMESPACE || {
+helm upgrade --install $HELM_RELEASE_NAME $HELM_CHART_PATH --namespace $KUBE_NAMESPACE -f $HELM_CHART_PATH/values.blue.yaml || {
     echo "Helm install/upgrade failed."
     exit 1
 }
