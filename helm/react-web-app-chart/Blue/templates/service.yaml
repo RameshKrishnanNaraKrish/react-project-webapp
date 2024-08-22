@@ -7,8 +7,8 @@ metadata:
 spec:
   selector:
     app: frontend-blue
-  type: {{ .Values.service.frontend-blue.type }}
+  type: {{ .Values.service.frontend_blue.type }}
   ports:
     - protocol: TCP
-      port: {{ .Values.service.frontend-blue.port }}
-      targetPort: {{ .Values.service.frontend-blue.targetPort }}
+      port: {{ .Values.service.frontend_blue.port }}
+      targetPort: {{ .Values.service.frontend_blue.targetPort }}

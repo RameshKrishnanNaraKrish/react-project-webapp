@@ -48,15 +48,15 @@ securityContext: {}
   # runAsUser: 1000
 
 service:
-  frontend-blue:
+  frontend_blue:
     type: NodePort       # Service type for frontend (ClusterIP, NodePort, LoadBalancer)
     port: 80              # Port on which the frontend service is exposed
     targetPort: 3000      # Port on the frontend container
-  service1-blue:
+  service1_blue:
     type: ClusterIP       # Service type for service1 (ClusterIP, NodePort, LoadBalancer)
     port: 80              # Port on which the service1 service is exposed
     targetPort: 3001      # Port on the service1 container
-  service2-blue:
+  service2_blue:
     type: ClusterIP       # Service type for service2 (ClusterIP, NodePort, LoadBalancer)
     port: 80              # Port on which the service2 service is exposed
     targetPort: 3002      # Port on the service2 container
