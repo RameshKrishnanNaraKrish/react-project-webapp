@@ -2,6 +2,8 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: service1
+  labels:
+    app: service1
 spec:
   replicas: 2
   selector:
@@ -16,4 +18,15 @@ spec:
       - name: service1
         image: rameshkrishnannarakrish/reactprojectwebapp_service1:{{ .Values.image.service1.tag }}
         ports:
-        - containerPort: 3001
+        - containerPort: {{ .Values.service.service1.targetPort }}
+        env:
+            - name: API_BASE_URL
+              value: "{{ .Values.env.API_BASE_URL_USERS }}"
+        livenessProbe:
+            httpGet:
+              path: /
+              port: {{ .Values.service.service1.port }}
+          readinessProbe:
+            httpGet:
+              path: /
+              port: {{ .Values.service.service1.port }}

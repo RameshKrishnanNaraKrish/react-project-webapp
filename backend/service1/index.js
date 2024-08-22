@@ -2,21 +2,21 @@ const express = require('express');
 const mysql = require('mysql');
 const cors = require('cors');
 const app = express();
-const port = 3001;
+const port = process.env.PORT || 3001;
 
 app.use(cors());
 app.use(express.json());
 
 const db = mysql.createConnection({
-  host: 'database-2.cbcg0a6q6sa7.us-east-1.rds.amazonaws.com',
-  user: 'admin',
-  password: 'syciK4VH9NiaFLPVNThd',
-  database: 'webappdb'
+  host: process.env.DB_HOST,         // Database host
+  user: process.env.DB_USER,         // Database user
+  password: process.env.DB_PASSWORD, // Database password
+  database: process.env.DB_NAME      // Database name
 });
 
 db.connect((err) => {
   if (err) throw err;
-  console.log('Connected to database');
+  console.log(`Connected to database at ${process.env.DB_HOST}`);
 });
 
 app.get('/users', (req, res) => {

@@ -13,7 +13,9 @@ export KUBECONFIG=$KUBECONFIG_PATH
 
 # Deploy the Helm chart
 echo "Deploying Helm chart..."
-aws s3 cp s3://$HELM_S3BUCKET_NAME/helm/react-web-app-chart ./helm/react-web-app-chart --recursive
+helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
+helm install prometheus prometheus-community/kube-prometheus-stack
+aws s3 cp s3://$HELM_S3BUCKET_NAME/helm/react-web-app-chart/Blue ./helm/react-web-app-chart/Blue/values.blue.yaml --recursive
 helm upgrade --install $HELM_RELEASE_NAME $HELM_CHART_PATH --namespace $KUBE_NAMESPACE --kubeconfig $KUBECONFIG_PATH
 
 # Verify deployment

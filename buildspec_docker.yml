@@ -7,6 +7,9 @@ env:
     DOCKER_REGISTRY_URL: /myapp/docker-registry/url
     GIT_TOKEN: /myapp/git-token
     S3_BUCKET_NAME: helms3bucket
+  variables:
+    IMAGE_TAG: "$CODEBUILD_BUILD_NUMBER"
+    ENVIRONMENT: "blue" 
 
 source:
   version: "0.2"
@@ -18,37 +21,26 @@ source:
 phases:
   install:
     runtime-versions:
-      nodejs: 14
+      docker: 20
+  pre_build:
     commands:
-      - echo "Installing dependencies for frontend..."
-      - cd frontend
-      - npm install
-      - npm audit fix --force
-      - echo "Installing dependencies for service1..."
-      - cd ../backend/service1
-      - npm install
-      - npm audit fix --force
-      - echo "Installing dependencies for service2..."
-      - cd ../service2
-      - npm install
-      - npm audit fix --force
+      - echo Logging in to Docker registry...
+      - echo "$DOCKER_REGISTRY_PASSWORD" | docker login -u "$DOCKER_REGISTRY_USERNAME" --password-stdin "$DOCKER_REGISTRY_URL"
 
   build:
     commands:
       - echo Building the application...
-      - echo "$DOCKER_REGISTRY_PASSWORD" | docker login -u "$DOCKER_REGISTRY_USERNAME" --password-stdin "$DOCKER_REGISTRY_URL"
-      - echo Building the application...
-      - docker build -t "$DOCKER_REGISTRY_URL/$DOCKER_REGISTRY_USERNAME/reactprojectwebapp_service2:$CODEBUILD_BUILD_NUMBER" .
-      - docker push "$DOCKER_REGISTRY_URL/$DOCKER_REGISTRY_USERNAME/reactprojectwebapp_service2:$CODEBUILD_BUILD_NUMBER"
+      - docker build -t "$DOCKER_REGISTRY_URL/$DOCKER_REGISTRY_USERNAME/reactprojectwebapp_service2${ENVIRONMENT}:$IMAGE_TAG" .
+      - docker push "$DOCKER_REGISTRY_URL/$DOCKER_REGISTRY_USERNAME/reactprojectwebapp_service2${ENVIRONMENT}:$IMAGE_TAG"
       - echo Building the application...
       - cd ../service1
       - echo Building the application...
-      - docker build -t "$DOCKER_REGISTRY_URL/$DOCKER_REGISTRY_USERNAME/reactprojectwebapp_service1:$CODEBUILD_BUILD_NUMBER" .
-      - docker push "$DOCKER_REGISTRY_URL/$DOCKER_REGISTRY_USERNAME/reactprojectwebapp_service1:$CODEBUILD_BUILD_NUMBER"
+      - docker build -t "$DOCKER_REGISTRY_URL/$DOCKER_REGISTRY_USERNAME/reactprojectwebapp_service1${ENVIRONMENT}:$IMAGE_TAG" .
+      - docker push "$DOCKER_REGISTRY_URL/$DOCKER_REGISTRY_USERNAME/reactprojectwebapp_service1${ENVIRONMENT}:$IMAGE_TAG"
       - cd ../../frontend
       - echo Building the application...
-      - docker build -t "$DOCKER_REGISTRY_URL/$DOCKER_REGISTRY_USERNAME/reactprojectwebapp_frontend:$CODEBUILD_BUILD_NUMBER" .
-      - docker push "$DOCKER_REGISTRY_URL/$DOCKER_REGISTRY_USERNAME/reactprojectwebapp_frontend:$CODEBUILD_BUILD_NUMBER"
+      - docker build -t "$DOCKER_REGISTRY_URL/$DOCKER_REGISTRY_USERNAME/reactprojectwebapp_frontend${ENVIRONMENT}:$IMAGE_TAG" .
+      - docker push "$DOCKER_REGISTRY_URL/$DOCKER_REGISTRY_USERNAME/reactprojectwebapp_frontend${ENVIRONMENT}:$IMAGE_TAG"
 
   post_build:
     commands:
@@ -56,8 +48,8 @@ phases:
       - echo Build completed on `date`
       - echo Updating Helm chart values with the new image tag...
       - cd ..
-      - echo $CODEBUILD_BUILD_NUMBER
-      - sed -i 's|tag:.*|tag:'"$CODEBUILD_BUILD_NUMBER"'|' helm/react-web-app-chart/values.yaml
+      - echo $IMAGE_TAG
+      - sed -i 's|tag:.*|tag:'"$IMAGE_TAG"'|' helm/react-web-app-chart/values.yaml
       - sed -i 's|tag:|tag:\ |' helm/react-web-app-chart/values.yaml
       - git config --global user.email "codebuild@aws.com"
       - git config --global user.name "AWS Codebuild"

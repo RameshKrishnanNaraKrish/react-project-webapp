@@ -1,34 +1,34 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: myapp-ingress
+  name: myapp-ingress-blue
   namespace: default
   annotations:
     nginx.ingress.kubernetes.io/rewrite-target: /
 spec:
   ingressClassName: nginx
   rules:
-  - host: myapp.orgramesh.com
+  - host: bluemyapp.orgramesh.com
     http:
       paths:
       - path: /
         pathType: Prefix
         backend:
           service:
-            name: frontend
+            name: frontend-blue
             port:
               number: 80
       - path: /users
         pathType: Prefix
         backend:
           service:
-            name: service1
+            name: service1-blue
             port:
               number: 80
       - path: /products
         pathType: Prefix
         backend:
           service:
-            name: service2
+            name: service2-blue
             port:
               number: 80

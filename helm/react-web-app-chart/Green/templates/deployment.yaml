@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: frontend-green
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: frontend-green
+  template:
+    metadata:
+      labels:
+        app: frontend-green
+    spec:
+      containers:
+      - name: frontend-green
+        image: rameshkrishnannarakrish/reactprojectwebapp_frontendgreen:{{ .Values.image.frontend-green.tag }}
+        ports:
+        - containerPort: {{ .Values.service.frontend-green.targetPort }}
+        env:
+          - name: API_BASE_URL_
+            value: "{{ .Values.env.API_BASE_URL }}"
+        livenessProbe:
+            httpGet:
+              path: /
+              port: {{ .Values.service.frontend-green.port }}
+          readinessProbe:
+            httpGet:
+              path: /
+              port: {{ .Values.service.frontend-green.port }}

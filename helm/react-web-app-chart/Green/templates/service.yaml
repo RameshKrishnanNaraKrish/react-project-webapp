@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: frontend-green
+  labels:
+    app: frontend-green
+spec:
+  selector:
+    app: frontend-green
+  type: {{ .Values.service.frontend-green.type }}
+  ports:
+    - protocol: TCP
+      port: {{ .Values.service.frontend-green.port }}
+      targetPort: {{ .Values.service.frontend-green.targetPort }}

@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: frontend-blue
+  labels:
+    app: frontend-blue
+spec:
+  selector:
+    app: frontend-blue
+  type: {{ .Values.service.frontend-blue.type }}
+  ports:
+    - protocol: TCP
+      port: {{ .Values.service.frontend-blue.port }}
+      targetPort: {{ .Values.service.frontend-blue.targetPort }}

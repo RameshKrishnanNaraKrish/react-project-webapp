@@ -1,7 +1,6 @@
 // src/config.js
 const config = {
-    API_BASE_URL_USERS: 'myapp.orgramesh.com',
-    API_BASE_URL_PRODUCTS: 'myapp.orgramesh.com',
+    API_BASE_URL: process.env.API_BASE_URL,
   };
   
   export default config;

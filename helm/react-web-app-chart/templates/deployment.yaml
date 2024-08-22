@@ -16,4 +16,17 @@ spec:
       - name: frontend
         image: rameshkrishnannarakrish/reactprojectwebapp_frontend:{{ .Values.image.frontend.tag }}
         ports:
-        - containerPort: 3000
+        - containerPort: {{ .Values.service.frontend.targetPort }}
+        env:
+          - name: REACT_APP_API_BASE_URL_USERS
+            value: "{{ .Values.env.API_BASE_URL_USERS }}"
+          - name: REACT_APP_API_BASE_URL_PRODUCTS
+            value: "{{ .Values.env.API_BASE_URL_PRODUCTS }}"
+        livenessProbe:
+            httpGet:
+              path: /
+              port: {{ .Values.service.frontend.port }}
+          readinessProbe:
+            httpGet:
+              path: /
+              port: {{ .Values.service.frontend.port }}

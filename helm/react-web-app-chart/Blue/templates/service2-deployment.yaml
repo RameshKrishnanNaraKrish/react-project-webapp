@@ -1,0 +1,52 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: service2-blue
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: service2-blue
+  template:
+    metadata:
+      labels:
+        app: service2-blue
+    spec:
+      containers:
+      - name: service2-blue
+        image: rameshkrishnannarakrish/reactprojectwebapp_service2blue:{{ .Values.image.service2-blue.tag }}
+        ports:
+        - containerPort: {{ .Values.service.service2-blue.targetPort }}
+        env:
+            - name: API_BASE_URL
+              value: "{{ .Values.env.API_BASE_URL_PRODUCTS }}"
+            - name: PORT
+              value: "{{ .Values.service.service2-blue.port }}"
+            - name: DB_HOST
+              valueFrom:
+                secretKeyRef:
+                  name: db-credentials-blue
+                  key: db_host
+            - name: DB_USER
+              valueFrom:
+                secretKeyRef:
+                  name: db-credentials-blue
+                  key: db_user
+            - name: DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: db-credentials-blue
+                  key: db_password
+            - name: DB_NAME
+              valueFrom:
+                secretKeyRef:
+                  name: db-credentials-blue
+                  key: db_name
+        livenessProbe:
+          httpGet:
+            path: /
+            port: {{ .Values.service.service2-blue.port }}
+        readinessProbe:
+          httpGet:
+            path: /
+            port: {{ .Values.service.service2-blue.port }}

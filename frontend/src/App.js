@@ -11,17 +11,17 @@ function App() {
   const [newProductPrice, setNewProductPrice] = useState('');
 
   useEffect(() => {
-    fetch(`${config.API_BASE_URL_USERS}/users`)  // Corrected template literal
+    fetch(`${config.API_BASE_URL}/users`)  // Corrected template literal
       .then(response => response.json())
       .then(data => setUsers(data));
 
-    fetch(`${config.API_BASE_URL_PRODUCTS}/products`)  // Corrected template literal
+    fetch(`${config.API_BASE_URL}/products`)  // Corrected template literal
       .then(response => response.json())
       .then(data => setProducts(data));
   }, []);
 
   const handleAddUser = () => {
-    fetch(`${config.API_BASE_URL_USERS}/users`, {  // Corrected template literal
+    fetch(`${config.API_BASE_URL}/users`, {  // Corrected template literal
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ name: newUserName, email: newUserEmail }),
@@ -38,7 +38,7 @@ function App() {
   };
 
   const handleAddProduct = () => {
-    fetch(`${config.API_BASE_URL_PRODUCTS}/products`, {  // Corrected template literal
+    fetch(`${config.API_BASE_URL}/products`, {  // Corrected template literal
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ name: newProductName, price: parseFloat(newProductPrice) }),
