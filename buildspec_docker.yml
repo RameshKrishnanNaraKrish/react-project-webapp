@@ -6,10 +6,7 @@ env:
     DOCKER_REGISTRY_PASSWORD: /myapp/docker-credentials/password
     DOCKER_REGISTRY_URL: /myapp/docker-registry/url
     GIT_TOKEN: /myapp/git-token
-    S3_BUCKET_NAME: helms3bucket
-  variables:
-    IMAGE_TAG: "$CODEBUILD_BUILD_NUMBER"
-    ENVIRONMENT: "blue" 
+    S3_BUCKET_NAME: /myapp/helms3bucket
 
 source:
   version: "0.2"
@@ -21,15 +18,18 @@ source:
 phases:
   install:
     runtime-versions:
-      docker: 20
+      nodejs: 14
   pre_build:
     commands:
       - echo Logging in to Docker registry...
       - echo "$DOCKER_REGISTRY_PASSWORD" | docker login -u "$DOCKER_REGISTRY_USERNAME" --password-stdin "$DOCKER_REGISTRY_URL"
+      - IMAGE_TAG=${CODEBUILD_BUILD_NUMBER}
+      - echo "Image_Tag:$IMAGE_TAG"
 
   build:
     commands:
       - echo Building the application...
+      - cd backend/service2
       - docker build -t "$DOCKER_REGISTRY_URL/$DOCKER_REGISTRY_USERNAME/reactprojectwebapp_service2${ENVIRONMENT}:$IMAGE_TAG" .
       - docker push "$DOCKER_REGISTRY_URL/$DOCKER_REGISTRY_USERNAME/reactprojectwebapp_service2${ENVIRONMENT}:$IMAGE_TAG"
       - echo Building the application...
