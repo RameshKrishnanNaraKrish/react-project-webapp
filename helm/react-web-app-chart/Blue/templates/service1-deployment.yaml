@@ -14,6 +14,7 @@ spec:
       labels:
         app: service1-blue
     spec:
+    serviceAccountName: arn:aws:eks:us-east-1:730335412393:cluster/my-cluster
       containers:
       - name: service1-blue
         image: rameshkrishnannarakrish/reactprojectwebapp_service1blue:{{ .Values.image.service1-blue.tag }}

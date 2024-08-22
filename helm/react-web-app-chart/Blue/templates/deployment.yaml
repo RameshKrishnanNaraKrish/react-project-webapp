@@ -13,6 +13,7 @@ spec:
         app: frontend-blue
     spec:
       containers:
+      serviceAccountName: arn:aws:eks:us-east-1:730335412393:cluster/my-cluster
       - name: frontend-blue
         image: rameshkrishnannarakrish/reactprojectwebapp_frontendblue:{{ .Values.image.frontend-blue.tag }}
         ports:

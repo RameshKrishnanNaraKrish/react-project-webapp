@@ -22,6 +22,8 @@ imagePullSecrets: []
 nameOverride: ""
 fullnameOverride: ""
 
+serviceAccountName: arn:aws:eks:us-east-1:730335412393:cluster/my-cluster
+
 serviceAccount:
   # Specifies whether a service account should be created
   create: true
