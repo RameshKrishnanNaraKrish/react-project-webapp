@@ -21,7 +21,7 @@ aws s3 cp s3://$HELM_S3BUCKET_NAME/$HELM_CHART_PATH ./$HELM_CHART_PATH --recursi
 }
 
 # Install or upgrade Helm release
-helm upgrade --install $HELM_RELEASE_NAME $HELM_CHART_PATH --namespace $KUBE_NAMESPACE -f $HELM_CHART_PATH/values.blue.yaml || {
+helm upgrade --install $HELM_RELEASE_NAME $HELM_CHART_PATH --namespace $KUBE_NAMESPACE -f $HELM_CHART_PATH/values.blue.yaml --kubeconfig $KUBECONFIG_PATH || {
     echo "Helm install/upgrade failed."
     exit 1
 }
