@@ -5,7 +5,7 @@ set -e
 HELM_RELEASE_NAME="react-web-app-chart"
 HELM_CHART_PATH="helm/react-web-app-chart/Blue"
 KUBE_NAMESPACE="default"
-KUBECONFIG_PATH="/home/ubuntu/.kube/config"
+KUBECONFIG_PATH="~/.kube/config"
 HELM_S3BUCKET_NAME="helms3bucket"
 
 # Set KUBECONFIG environment variable
@@ -33,7 +33,7 @@ aws s3 cp s3://$HELM_S3BUCKET_NAME/$HELM_CHART_PATH ./$HELM_CHART_PATH --recursi
 }
 
 # Install or upgrade Helm release
-helm upgrade --install $HELM_RELEASE_NAME $HELM_CHART_PATH --namespace $KUBE_NAMESPACE -f $HELM_CHART_PATH/values.blue.yaml --kubeconfig $KUBECONFIG_PATH || {
+sudo helm upgrade --install $HELM_RELEASE_NAME $HELM_CHART_PATH --namespace $KUBE_NAMESPACE -f $HELM_CHART_PATH/values.blue.yaml --kubeconfig $KUBECONFIG_PATH || {
     echo "Helm install/upgrade failed."
     exit 1
 }
