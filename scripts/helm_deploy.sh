@@ -17,11 +17,11 @@ if [ ! -f "$KUBECONFIG_PATH" ]; then
     exit 1
 fi
 
-# Verify Kubernetes cluster access
-if ! kubectl get nodes >/dev/null 2>&1; then
-    echo "Cannot access Kubernetes cluster. Check kubeconfig."
-    exit 1
-fi
+# # Verify Kubernetes cluster access
+# if ! kubectl get nodes >/dev/null 2>&1; then
+#     echo "Cannot access Kubernetes cluster. Check kubeconfig."
+#     exit 1
+# fi
 
 # Deploy the Helm chart
 echo "Deploying Helm chart..."
