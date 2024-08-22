@@ -1,14 +1,14 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: service1
+  name: service1-blue
   labels:
-    app: service1
+    app: service1-blue
 spec:
   selector:
-    app: service1
-  type: {{ .Values.service.service1.type }}
+    app: service1-blue
+  type: {{ .Values.service.service1-blue.type }}
   ports:
     - protocol: TCP
-      port: {{ .Values.service.service1.port }}
-      targetPort: {{ .Values.service.service1.targetPort }}
+      port: {{ .Values.service.service1-blue.port }}
+      targetPort: {{ .Values.service.service1-blue.targetPort }}
