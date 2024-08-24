@@ -16,14 +16,14 @@ spec:
     spec:
       containers:
       - name: service1-green
-        image: rameshkrishnannarakrish/reactprojectwebapp_service1green:{{ .Values.image.service1-green.tag }}
+        image: rameshkrishnannarakrish/reactprojectwebapp_service1green:{{ .Values.image.service1_green.tag }}
         ports:
-        - containerPort: {{ .Values.service.service1-green.targetPort }}
+        - containerPort: {{ .Values.service.service1_green.targetPort }}
         env:
             - name: API_BASE_URL
               value: "{{ .Values.env.API_BASE_URL }}"
             - name: PORT
-              value: "{{ .Values.service.service1-green.port }}"
+              value: "{{ .Values.service.service1_green.port }}"
             - name: DB_HOST
               valueFrom:
                 secretKeyRef:
@@ -47,8 +47,8 @@ spec:
         livenessProbe:
             httpGet:
               path: /
-              port: {{ .Values.service.service1-green.port }}
+              port: {{ .Values.service.service1_green.port }}
           readinessProbe:
             httpGet:
               path: /
-              port: {{ .Values.service.service1-green.port }}
+              port: {{ .Values.service.service1_green.port }}

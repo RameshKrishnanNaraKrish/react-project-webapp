@@ -7,8 +7,8 @@ metadata:
 spec:
   selector:
     app: service1-green
-  type: {{ .Values.service.service1-green.type }}
+  type: {{ .Values.service.service1_green.type }}
   ports:
     - protocol: TCP
-      port: {{ .Values.service.service1-green.port }}
-      targetPort: {{ .Values.service.service1-green.targetPort }}
+      port: {{ .Values.service.service1_green.port }}
+      targetPort: {{ .Values.service.service1_green.targetPort }}

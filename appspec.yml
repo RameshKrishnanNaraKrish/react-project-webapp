@@ -13,7 +13,7 @@ hooks:
   AfterInstall:
     - location: scripts/helm_deploy.sh
       timeout: 300
-      runas: root
+      runas: ubuntu
 
   ValidateService:
     - location: scripts/validate.sh

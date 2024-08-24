@@ -5,16 +5,16 @@
 replicaCount: 1
 
 image:
-  service1-blue:
+  service1_blue:
     repository: rameshkrishnannarakrish/reactprojectwebapp_service1blue
     pullPolicy: IfNotPresent
     tag: 154
-  service2-blue:
+  service2_blue:
     repository: rameshkrishnannarakrish/reactprojectwebapp_service2blue
     pullPolicy: IfNotPresent
     tag: 154
-  frontend-blue:
-    repository: rameshkrishnannarakrish/reactprojectwebapp__frontendblue
+  frontend_blue:
+    repository: rameshkrishnannarakrish/reactprojectwebapp_frontendblue
     pullPolicy: IfNotPresent
     tag: 154
 

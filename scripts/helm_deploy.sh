@@ -17,11 +17,11 @@ if [ ! -f "$KUBECONFIG_PATH" ]; then
     exit 1
 fi
 
-# # Verify Kubernetes cluster access
-# if ! kubectl get nodes >/dev/null 2>&1; then
-#     echo "Cannot access Kubernetes cluster. Check kubeconfig."
-#     exit 1
-# fi
+# Verify Kubernetes cluster access
+if ! kubectl get nodes >/dev/null 2>&1; then
+    echo "Cannot access Kubernetes cluster. Check kubeconfig."
+    exit 1
+fi
 
 # Deploy the Helm chart
 echo "Deploying Helm chart..."
@@ -33,7 +33,7 @@ aws s3 cp s3://$HELM_S3BUCKET_NAME/$HELM_CHART_PATH ./$HELM_CHART_PATH --recursi
 }
 
 # Install or upgrade Helm release
-sudo helm upgrade --install $HELM_RELEASE_NAME $HELM_CHART_PATH --namespace $KUBE_NAMESPACE -f $HELM_CHART_PATH/values.blue.yaml --kubeconfig $KUBECONFIG_PATH || {
+helm upgrade --install $HELM_RELEASE_NAME $HELM_CHART_PATH --namespace $KUBE_NAMESPACE -f $HELM_CHART_PATH/values.blue.yaml --kubeconfig $KUBECONFIG_PATH || {
     echo "Helm install/upgrade failed."
     exit 1
 }

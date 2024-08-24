@@ -17,14 +17,14 @@ spec:
     serviceAccountName: arn:aws:eks:us-east-1:730335412393:cluster/my-cluster
       containers:
       - name: service1-blue
-        image: rameshkrishnannarakrish/reactprojectwebapp_service1blue:{{ .Values.image.service1-blue.tag }}
+        image: rameshkrishnannarakrish/reactprojectwebapp_service1blue:{{ .Values.image.service1_blue.tag }}
         ports:
-        - containerPort: {{ .Values.service.service1-blue.targetPort }}
+        - containerPort: {{ .Values.service.service1_blue.targetPort }}
         env:
             - name: API_BASE_URL
               value: "{{ .Values.env.API_BASE_URL_USERS }}"
             - name: PORT
-              value: "{{ .Values.service.service1-blue.port }}"
+              value: "{{ .Values.service.service1_blue.port }}"
             - name: DB_HOST
               valueFrom:
                 secretKeyRef:
@@ -48,8 +48,8 @@ spec:
         livenessProbe:
             httpGet:
               path: /
-              port: {{ .Values.service.service1-blue.port }}
+              port: {{ .Values.service.service1_blue.port }}
           readinessProbe:
             httpGet:
               path: /
-              port: {{ .Values.service.service1-blue.port }}
+              port: {{ .Values.service.service1_blue.port }}

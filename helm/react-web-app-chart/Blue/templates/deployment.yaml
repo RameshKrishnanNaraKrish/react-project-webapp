@@ -15,17 +15,17 @@ spec:
       containers:
       serviceAccountName: arn:aws:eks:us-east-1:730335412393:cluster/my-cluster
       - name: frontend-blue
-        image: rameshkrishnannarakrish/reactprojectwebapp_frontendblue:{{ .Values.image.frontend-blue.tag }}
+        image: rameshkrishnannarakrish/reactprojectwebapp_frontendblue:{{ .Values.image.frontend_blue.tag }}
         ports:
-        - containerPort: {{ .Values.service.frontend-blue.targetPort }}
+        - containerPort: {{ .Values.service.frontend_blue.targetPort }}
         env:
           - name: API_BASE_URL
             value: "{{ .Values.env.API_BASE_URL }}"
         livenessProbe:
             httpGet:
               path: /
-              port: {{ .Values.service.frontend-blue.port }}
+              port: {{ .Values.service.frontend_blue.port }}
           readinessProbe:
             httpGet:
               path: /
-              port: {{ .Values.service.frontend-blue.port }}
+              port: {{ .Values.service.frontend_blue.port }}
