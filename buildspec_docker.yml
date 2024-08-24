@@ -49,8 +49,8 @@ phases:
       - echo Updating Helm chart values with the new image tag...
       - cd ..
       - echo $IMAGE_TAG
-      - sed -i 's|tag:.*|tag:'"$IMAGE_TAG"'|' helm/react-web-app-chart/values.yaml
-      - sed -i 's|tag:|tag:\ |' helm/react-web-app-chart/values.yaml
+      - sed -i 's|tag:.*|tag:'"$IMAGE_TAG"'|' helm/react-web-app-chart/values.${ENVIRONMENT}.yaml
+      - sed -i 's|tag:|tag:\ |' helm/react-web-app-chart/values.${ENVIRONMENT}.yaml
       - git config --global user.email "codebuild@aws.com"
       - git config --global user.name "AWS Codebuild"
       - echo "https://$GIT_TOKEN@github.com" > ~/.git-credentials
