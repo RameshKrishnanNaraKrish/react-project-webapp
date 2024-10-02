@@ -17,7 +17,7 @@ spec:
             name: frontend-service-green
             port:
               number: 80
-  - host: api-blue.orgramesh.com
+  - host: api-green.orgramesh.com
     http:
       paths:
       - path: /users
