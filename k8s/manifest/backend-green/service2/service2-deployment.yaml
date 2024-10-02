@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
       - name: service2
-        image: public.ecr.aws/l1b1a8r4/reactprojectwebapp_service2:2  # Replace with your service2 Docker image
+        image: public.ecr.aws/l1b1a8r4/reactprojectwebapp_service2:3  # Replace with your service2 Docker image
       imagePullSecrets:
       - name: myregistrykey
         ports:
