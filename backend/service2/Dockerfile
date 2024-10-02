@@ -1,17 +1,17 @@
-# Dockerfile for service1 and service2
 FROM node:14-alpine
 
+# Set the working directory inside the container
 WORKDIR /app
 
-# Install dependencies
+# Copy the package.json and package-lock.json and install dependencies
 COPY package.json ./
 RUN npm install
 
-# Copy application code
+# Copy the application code
 COPY . .
 
-# Expose the port
-EXPOSE 3000
+# Expose the port for service1
+EXPOSE 3002
 
 # Start the application
-CMD ["node", "index.js"]  # Replace with `service2.js` for service2
+CMD ["node", "index.js"]

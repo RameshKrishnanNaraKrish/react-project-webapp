@@ -1,0 +1,13 @@
+# Service1 Service (service1-service.yaml)
+apiVersion: v1
+kind: Service
+metadata:
+  name: service1-service-blue
+spec:
+  selector:
+    app: service1
+    version: blue
+  ports:
+    - port: 3001
+      targetPort: 3001
+  type: ClusterIP

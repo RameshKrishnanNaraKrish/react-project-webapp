@@ -1,0 +1,22 @@
+# Frontend Deployment - Blue Version (frontend-blue.yaml)
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: frontend-blue
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: frontend
+      version: blue
+  template:
+    metadata:
+      labels:
+        app: frontend
+        version: blue
+    spec:
+      containers:
+      - name: frontend
+        image: rameshkrishnannarakrish/reactprojectwebapp_frontend:10342739826  # Replace with your frontend Docker image
+        ports:
+        - containerPort: 80

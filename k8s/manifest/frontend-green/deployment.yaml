@@ -1,19 +1,19 @@
-# Frontend Deployment - Blue Version (frontend-blue.yaml)
+# Frontend Deployment - green Version (frontend-blue.yaml)
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: frontend-blue
+  name: frontend-green
 spec:
   replicas: 2
   selector:
     matchLabels:
       app: frontend
-      version: blue
+      version: green
   template:
     metadata:
       labels:
         app: frontend
-        version: blue
+        version: green
     spec:
       containers:
       - name: frontend

@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import './App.css';
-import config from './config';
 
 function App() {
   const [users, setUsers] = useState([]);
@@ -9,10 +8,18 @@ function App() {
   const [newUserEmail, setNewUserEmail] = useState('');
   const [newProductName, setNewProductName] = useState('');
   const [newProductPrice, setNewProductPrice] = useState('');
+  
+  // Feature flag or environment variable to determine the API environment (blue/green)
+  const FEATURE_FLAG = process.env.REACT_APP_FEATURE_FLAG || 'blue'; // Default to 'blue' if not set
+
+  // Set API_BASE_URL dynamically based on feature flag
+  const API_BASE_URL = FEATURE_FLAG === 'blue' 
+    ? 'https://api-blue.orgramesh.com' 
+    : 'https://api-green.orgramesh.com';
 
   // Common function to fetch data
   const fetchData = (endpoint, setState) => {
-    fetch(`${config.API_BASE_URL}/${endpoint}`)
+    fetch(`${API_BASE_URL}/${endpoint}`)
       .then(response => {
         if (!response.ok) {
           throw new Error(`Failed to fetch ${endpoint}`);
@@ -26,12 +33,12 @@ function App() {
   useEffect(() => {
     fetchData('users', setUsers);
     fetchData('products', setProducts);
-  }, []);
+  }, [API_BASE_URL]);  // Re-run if API_BASE_URL changes
 
   // Handle adding a new user
   const handleAddUser = () => {
     if (newUserName && newUserEmail) {
-      fetch(`${config.API_BASE_URL}/users`, {
+      fetch(`${API_BASE_URL}/users`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ name: newUserName, email: newUserEmail }),
@@ -54,7 +61,7 @@ function App() {
   // Handle adding a new product
   const handleAddProduct = () => {
     if (newProductName && newProductPrice) {
-      fetch(`${config.API_BASE_URL}/products`, {
+      fetch(`${API_BASE_URL}/products`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ name: newProductName, price: parseFloat(newProductPrice) }),

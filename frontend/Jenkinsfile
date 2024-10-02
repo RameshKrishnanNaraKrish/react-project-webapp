@@ -18,7 +18,7 @@ pipeline {
 
         stage('OWASP Dependency-Check Scan') {
             steps {
-                dir('fontend') {
+                dir('Application-Code/frontend') {
                     dependencyCheck additionalArguments: '--scan ./ --disableYarnAudit --disableNodeAudit', odcInstallation: 'DP-Check'
                     dependencyCheckPublisher pattern: '**/dependency-check-report.xml'
                 }
@@ -26,7 +26,7 @@ pipeline {
         }
         stage('Trivy File Scan') {
             steps {
-                dir('fontend') {
+                dir('Application-Code/frontend') {
                     sh 'trivy fs . > trivyfs.txt'
                 }
             }
@@ -44,8 +44,8 @@ pipeline {
 
         stage('Build and Push Docker Image frontend') {
             steps {
+                dir('frontend') {
                 script {
-                    dir('fontend'){
                     sh '''
                     docker build -t $ECR_REPOSITORY_FRONTEND:$DOCKER_IMAGE_TAG .
                     docker tag $ECR_REPOSITORY_FRONTEND:$DOCKER_IMAGE_TAG public.ecr.aws/l1b1a8r4/$ECR_REPOSITORY_FRONTEND:$DOCKER_IMAGE_TAG
@@ -53,8 +53,8 @@ pipeline {
                     '''
                     }
                 }
+                }
             }
-        }
 
         stage("TRIVY Image Scan") {
             steps {
@@ -72,7 +72,25 @@ pipeline {
                 GIT_USER_NAME = "RameshKrishnanNaraKrish"
             }
             steps {
-                dir('k8s/manifest/fontend') {
+                dir('k8s/manifest/fontend-blue') {
+                    withCredentials([string(credentialsId: 'github', variable: 'GITHUB_TOKEN')]) {
+                        sh '''
+                            git config user.email "nkrameshkrishnan@gmail.com"
+                            git config user.name "RameshKrishnanNaraKrish"
+                            BUILD_NUMBER=${BUILD_NUMBER}
+                            echo $BUILD_NUMBER
+                            imageTag=$(grep -oP '(?<=reactprojectwebapp_frontend:)[^ ]+' deployment.yaml)
+                            echo $imageTag
+                            sed -i "s/${ECR_REPOSITORY_FRONTEND}:${imageTag}/${ECR_REPOSITORY_FRONTEND}:${BUILD_NUMBER}/" deployment.yaml
+                            git add deployment.yaml
+                            git commit -m "Update deployment Image to version \${BUILD_NUMBER}"
+                            git push https://${GITHUB_TOKEN}@github.com/${GIT_USER_NAME}/${GIT_REPO_NAME} HEAD:master
+                        '''
+                    }
+                }
+            }
+            steps {
+                dir('k8s/manifest/fontend-green') {
                     withCredentials([string(credentialsId: 'github', variable: 'GITHUB_TOKEN')]) {
                         sh '''
                             git config user.email "nkrameshkrishnan@gmail.com"

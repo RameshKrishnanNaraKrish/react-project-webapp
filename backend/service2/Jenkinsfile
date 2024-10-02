@@ -72,7 +72,25 @@ pipeline {
                 GIT_USER_NAME = "RameshKrishnanNaraKrish"
             }
             steps {
-                dir('k8s/manifest/backend/service2') {
+                dir('k8s/manifest/backend-blue/service2') {
+                    withCredentials([string(credentialsId: 'github', variable: 'GITHUB_TOKEN')]) {
+                        sh '''
+                            git config user.email "nkrameshkrishnan@gmail.com"
+                            git config user.name "RameshKrishnanNaraKrish"
+                            BUILD_NUMBER=${BUILD_NUMBER}
+                            echo $BUILD_NUMBER
+                            imageTag=$(grep -oP '(?<=reactprojectwebapp_service2:)[^ ]+' service2-deployment.yaml)
+                            echo $imageTag
+                            sed -i "s/${ECR_REPOSITORY_SERVICE2}:${imageTag}/${ECR_REPOSITORY_SERVICE2}:${BUILD_NUMBER}/" service2-deployment.yaml
+                            git add service2-deployment.yaml
+                            git commit -m "Update deployment Image to version \${BUILD_NUMBER}"
+                            git push https://${GITHUB_TOKEN}@github.com/${GIT_USER_NAME}/${GIT_REPO_NAME} HEAD:master
+                        '''
+                    }
+                }
+            }
+            steps {
+                dir('k8s/manifest/backend-green/service2') {
                     withCredentials([string(credentialsId: 'github', variable: 'GITHUB_TOKEN')]) {
                         sh '''
                             git config user.email "nkrameshkrishnan@gmail.com"

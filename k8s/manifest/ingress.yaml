@@ -18,23 +18,20 @@ spec:
             name: frontend
             port:
               number: 80
-  - host: service1.orgramesh.com
+  - host: api-blue.orgramesh.com
     http:
       paths:
       - path: /users
         pathType: Prefix
         backend:
           service:
-            name: service1
+            name: service1-service-blue
             port:
               number: 3001
-  - host: service2.orgramesh.com
-    http:
-      paths:
       - path: /products
         pathType: Prefix
         backend:
           service:
-            name: service2
+            name: service2-service-blue
             port:
               number: 3002

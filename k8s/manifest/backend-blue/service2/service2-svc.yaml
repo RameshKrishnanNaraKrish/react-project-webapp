@@ -1,0 +1,13 @@
+# Service2 Service (service2-service.yaml)
+apiVersion: v1
+kind: Service
+metadata:
+  name: service2-service-blue
+spec:
+  selector:
+    app: service2
+    version: blue
+  ports:
+    - port: 3002
+      targetPort: 3002
+  type: ClusterIP
