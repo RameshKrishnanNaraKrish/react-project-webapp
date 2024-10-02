@@ -63,14 +63,16 @@ pipeline {
             }
         }
 
-        stage('Build and Push Docker Image frontend') {
+        stage('Build and Push Docker Image service1') {
             steps {
                 script {
+                    dir('backend/service1'){
                     sh '''
                     docker build -t $ECR_REPOSITORY_FRONTEND:$DOCKER_IMAGE_TAG ./frontend
                     docker tag $ECR_REPOSITORY_FRONTEND:$DOCKER_IMAGE_TAG public.ecr.aws/l1b1a8r4/$ECR_REPOSITORY_FRONTEND:$DOCKER_IMAGE_TAG
                     docker push public.ecr.aws/l1b1a8r4/$ECR_REPOSITORY_FRONTEND:$DOCKER_IMAGE_TAG
                     '''
+                    }
                 }
             }
         }

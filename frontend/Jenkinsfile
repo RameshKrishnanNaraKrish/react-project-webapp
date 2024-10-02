@@ -1,0 +1,94 @@
+pipeline {
+    agent any
+
+    environment {
+        AWS_ACCOUNT_ID = '730335412393'
+        AWS_REGION = 'us-east-1'
+        ECR_REPOSITORY_FRONTEND = 'reactprojectwebapp_frontend'
+        DOCKER_IMAGE_TAG = "${env.BUILD_ID}"
+        REPOSITORY_URI = "${AWS_ACCOUNT_ID}.dkr.ecr.${AWS__REGION}.amazonaws.com/"
+    }
+
+    stages {
+        stage('Checkout from Git') {
+            steps {
+                git branch: 'main', url: 'https://github.com/RameshKrishnanNaraKrish/react-project-webapp.git'
+            }
+        }
+
+        stage('OWASP Dependency-Check Scan') {
+            steps {
+                dir('fontend') {
+                    dependencyCheck additionalArguments: '--scan ./ --disableYarnAudit --disableNodeAudit', odcInstallation: 'DP-Check'
+                    dependencyCheckPublisher pattern: '**/dependency-check-report.xml'
+                }
+            }
+        }
+        stage('Trivy File Scan') {
+            steps {
+                dir('fontend') {
+                    sh 'trivy fs . > trivyfs.txt'
+                }
+            }
+        }
+
+        stage('Docker Login to ECR') {
+            steps {
+                script {
+                    sh '''
+                    aws ecr-public get-login-password --region us-east-1 | docker login --username AWS --password-stdin public.ecr.aws/l1b1a8r4
+                    '''
+                }
+            }
+        }
+
+        stage('Build and Push Docker Image frontend') {
+            steps {
+                script {
+                    dir('fontend'){
+                    sh '''
+                    docker build -t $ECR_REPOSITORY_FRONTEND:$DOCKER_IMAGE_TAG .
+                    docker tag $ECR_REPOSITORY_FRONTEND:$DOCKER_IMAGE_TAG public.ecr.aws/l1b1a8r4/$ECR_REPOSITORY_FRONTEND:$DOCKER_IMAGE_TAG
+                    docker push public.ecr.aws/l1b1a8r4/$ECR_REPOSITORY_FRONTEND:$DOCKER_IMAGE_TAG
+                    '''
+                    }
+                }
+            }
+        }
+
+        stage("TRIVY Image Scan") {
+            steps {
+                sh 'trivy image public.ecr.aws/l1b1a8r4/$ECR_REPOSITORY_FRONTEND:$DOCKER_IMAGE_TAG > trivyimage.txt' 
+            }
+        }
+        stage('Checkout Code') {
+            steps {
+                git branch: 'main', url: 'https://github.com/RameshKrishnanNaraKrish/react-project-webapp.git'
+            }
+        }
+        stage('Update Deployment file') {
+            environment {
+                GIT_REPO_NAME = "react-project-webapp"
+                GIT_USER_NAME = "RameshKrishnanNaraKrish"
+            }
+            steps {
+                dir('k8s/manifest/fontend') {
+                    withCredentials([string(credentialsId: 'github', variable: 'GITHUB_TOKEN')]) {
+                        sh '''
+                            git config user.email "nkrameshkrishnan@gmail.com"
+                            git config user.name "RameshKrishnanNaraKrish"
+                            BUILD_NUMBER=${BUILD_NUMBER}
+                            echo $BUILD_NUMBER
+                            imageTag=$(grep -oP '(?<=reactprojectwebapp_frontend:)[^ ]+' deployment.yaml)
+                            echo $imageTag
+                            sed -i "s/${ECR_REPOSITORY_FRONTEND}:${imageTag}/${ECR_REPOSITORY_FRONTEND}:${BUILD_NUMBER}/" deployment.yaml
+                            git add deployment.yaml
+                            git commit -m "Update deployment Image to version \${BUILD_NUMBER}"
+                            git push https://${GITHUB_TOKEN}@github.com/${GIT_USER_NAME}/${GIT_REPO_NAME} HEAD:master
+                        '''
+                    }
+                }
+            }
+        }
+    }
+}
