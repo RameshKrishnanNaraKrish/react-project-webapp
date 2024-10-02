@@ -13,7 +13,7 @@ function App() {
   const FEATURE_FLAG = process.env.REACT_APP_FEATURE_FLAG || 'blue'; // Default to 'blue' if not set
 
   // Set API_BASE_URL dynamically based on feature flag
-  const API_BASE_URL = FEATURE_FLAG === 'blue' 
+  const API_BASE_URL = FEATURE_FLAG === 'green' 
     ? 'https://api-blue.orgramesh.com' 
     : 'https://api-green.orgramesh.com';
 
