@@ -10,48 +10,68 @@ function App() {
   const [newProductName, setNewProductName] = useState('');
   const [newProductPrice, setNewProductPrice] = useState('');
 
-  useEffect(() => {
-    fetch(`${config.API_BASE_URL}/users`)  // Corrected template literal
-      .then(response => response.json())
-      .then(data => setUsers(data));
-
-    fetch(`${config.API_BASE_URL}/products`)  // Corrected template literal
-      .then(response => response.json())
-      .then(data => setProducts(data));
-  }, []);
-
-  const handleAddUser = () => {
-    fetch(`${config.API_BASE_URL}/users`, {  // Corrected template literal
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ name: newUserName, email: newUserEmail }),
-    })
-      .then(response => response.json())
-      .then(user => {
-        setUsers([...users, user]);
-        setNewUserName('');
-        setNewUserEmail('');
+  // Common function to fetch data
+  const fetchData = (endpoint, setState) => {
+    fetch(`${config.API_BASE_URL}/${endpoint}`)
+      .then(response => {
+        if (!response.ok) {
+          throw new Error(`Failed to fetch ${endpoint}`);
+        }
+        return response.json();
       })
-      .catch(error => {
-        console.error('Error adding user:', error);
-      });
+      .then(data => setState(data))
+      .catch(error => console.error(`Error fetching ${endpoint}:`, error));
   };
 
-  const handleAddProduct = () => {
-    fetch(`${config.API_BASE_URL}/products`, {  // Corrected template literal
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ name: newProductName, price: parseFloat(newProductPrice) }),
-    })
-      .then(response => response.json())
-      .then(product => {
-        setProducts([...products, product]);
-        setNewProductName('');
-        setNewProductPrice('');
+  useEffect(() => {
+    fetchData('users', setUsers);
+    fetchData('products', setProducts);
+  }, []);
+
+  // Handle adding a new user
+  const handleAddUser = () => {
+    if (newUserName && newUserEmail) {
+      fetch(`${config.API_BASE_URL}/users`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name: newUserName, email: newUserEmail }),
       })
-      .catch(error => {
-        console.error('Error adding product:', error);
-      });
+        .then(response => {
+          if (!response.ok) {
+            throw new Error('Failed to add user');
+          }
+          return response.json();
+        })
+        .then(user => {
+          setUsers([...users, user]);
+          setNewUserName('');
+          setNewUserEmail('');
+        })
+        .catch(error => console.error('Error adding user:', error));
+    }
+  };
+
+  // Handle adding a new product
+  const handleAddProduct = () => {
+    if (newProductName && newProductPrice) {
+      fetch(`${config.API_BASE_URL}/products`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name: newProductName, price: parseFloat(newProductPrice) }),
+      })
+        .then(response => {
+          if (!response.ok) {
+            throw new Error('Failed to add product');
+          }
+          return response.json();
+        })
+        .then(product => {
+          setProducts([...products, product]);
+          setNewProductName('');
+          setNewProductPrice('');
+        })
+        .catch(error => console.error('Error adding product:', error));
+    }
   };
 
   return (

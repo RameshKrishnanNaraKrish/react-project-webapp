@@ -1,19 +1,22 @@
+# Service2 Deployment - Blue Version (service2-blue.yaml)
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: service2
+  name: service2-blue
 spec:
-  replicas: 1
+  replicas: 2
   selector:
     matchLabels:
       app: service2
+      version: blue
   template:
     metadata:
       labels:
         app: service2
+        version: blue
     spec:
       containers:
       - name: service2
-        image: rameshkrishnannarakrish/reactprojectwebapp_service2:10342739826
+        image: rameshkrishnannarakrish/reactprojectwebapp_service2:10342739826  # Replace with your service2 Docker image
         ports:
         - containerPort: 3002

@@ -1,16 +1,21 @@
-# The variables are set during build time using --build-arg
-FROM node:14
-WORKDIR /usr/src/app
-COPY package*.json ./
-RUN npm install && npm audit fix --force
+# Dockerfile for the frontend React app
+FROM node:14-alpine AS build
+
+WORKDIR /app
+
+# Copy package.json and install dependencies
+COPY package.json package-lock.json ./
+RUN npm install
+
+# Copy the rest of the application code
 COPY . .
 
-ARG API_BASE_URL
-
-ENV API_BASE_URL=$API_BASE_URL
-
-
+# Build the app
 RUN npm run build
 
-EXPOSE 3000
-CMD ["npm", "start"]
+# Use a lightweight web server to serve the static files
+FROM nginx:alpine
+COPY --from=build /app/build /usr/share/nginx/html
+
+EXPOSE 80
+CMD ["nginx", "-g", "daemon off;"]

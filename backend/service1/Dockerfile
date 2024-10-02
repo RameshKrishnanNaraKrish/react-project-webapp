@@ -1,7 +1,17 @@
-FROM node:14
-WORKDIR /usr/src/app
-COPY package*.json ./
-RUN npm install && npm audit fix --force
+# Dockerfile for service1 and service2
+FROM node:14-alpine
+
+WORKDIR /app
+
+# Install dependencies
+COPY package.json package-lock.json ./
+RUN npm install
+
+# Copy application code
 COPY . .
-EXPOSE 3001
-CMD ["node", "index.js"]
+
+# Expose the port
+EXPOSE 3000
+
+# Start the application
+CMD ["node", "index.js"]  # Replace with `service2.js` for service2
