@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
       - name: frontend
-        image: public.ecr.aws/l1b1a8r4/reactprojectwebapp_frontend:5  # Replace with your frontend Docker image
+        image: public.ecr.aws/l1b1a8r4/reactprojectwebapp_frontend:8  # Replace with your frontend Docker image
       imagePullSecrets:
       - name: myregistrykey
         ports:
