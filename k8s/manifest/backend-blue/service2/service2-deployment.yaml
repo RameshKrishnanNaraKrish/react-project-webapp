@@ -17,6 +17,8 @@ spec:
     spec:
       containers:
       - name: service2
-        image: rameshkrishnannarakrish/reactprojectwebapp_service2:10342739826  # Replace with your service2 Docker image
+        image: rameshkrishnannarakrish/reactprojectwebapp_service2:1  # Replace with your service2 Docker image
+      imagePullSecrets:
+      - name: myregistrykey
         ports:
         - containerPort: 3002

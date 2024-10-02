@@ -17,6 +17,8 @@ spec:
     spec:
       containers:
       - name: frontend
-        image: rameshkrishnannarakrish/reactprojectwebapp_frontend:10342739826  # Replace with your frontend Docker image
+        image: rameshkrishnannarakrish/reactprojectwebapp_frontend:3  # Replace with your frontend Docker image
+      imagePullSecrets:
+      - name: myregistrykey
         ports:
         - containerPort: 80
