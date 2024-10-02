@@ -17,6 +17,6 @@ spec:
     spec:
       containers:
       - name: service1
-        image: rameshkrishnannarakrish/reactprojectwebapp_service1:10342739826  # Replace with your service1 Docker image
+        image: rameshkrishnannarakrish/reactprojectwebapp_service1:13  # Replace with your service1 Docker image
         ports:
         - containerPort: 3001
