@@ -12,8 +12,11 @@ RUN npm install
 COPY . .
 
 # Build the app with the feature flag to switch between blue and green services
-ARG REACT_APP_FEATURE_FLAG
-RUN REACT_APP_FEATURE_FLAG=$REACT_APP_FEATURE_FLAG npm run build
+ARG REACT_APP_API_BASE_URL
+ENV REACT_APP_API_BASE_URL=$REACT_APP_API_BASE_URL
+
+# Build the React app
+RUN npm run build
 
 # Stage 2: Serve the React app using Nginx
 FROM nginx:alpine

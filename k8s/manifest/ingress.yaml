@@ -17,9 +17,6 @@ spec:
             name: frontend-service-green
             port:
               number: 80
-  - host: api-green.orgramesh.com
-    http:
-      paths:
       - path: /users
         pathType: Prefix
         backend:

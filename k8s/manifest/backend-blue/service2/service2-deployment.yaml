@@ -18,7 +18,21 @@ spec:
       containers:
       - name: service2
         image: public.ecr.aws/l1b1a8r4/reactprojectwebapp_service2:3  # Replace with your service2 Docker image
-      imagePullSecrets:
-      - name: myregistrykey
         ports:
         - containerPort: 3002
+      env:
+        # MySQL configuration for the app to connect to the MySQL service
+        - name: DB_HOST
+          value: "mysql-service"      # Internal service name for MySQL
+        - name: DB_USER
+          value: "root"               # MySQL root user
+        - name: DB_PASSWORD
+          value: "Test@123"           # MySQL root password
+        - name: DB_NAME
+          value: "reactwebapp"
+      readinessProbe:
+          httpGet:
+            path: /
+            port: 3002
+          initialDelaySeconds: 5
+          periodSeconds: 5
