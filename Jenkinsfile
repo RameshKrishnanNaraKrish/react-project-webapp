@@ -2,127 +2,72 @@ pipeline {
     agent any
 
     environment {
-        AWS_ACCOUNT_ID = '730335412393'
-        AWS_REGION = 'us-east-1'
-        ECR_REPOSITORY_FRONTEND = 'reactprojectwebapp_frontend'
-        ECR_REPOSITORY_SERVICE1 = 'reactprojectwebapp_service1'
-        ECR_REPOSITORY_SERVICE2 = 'reactprojectwebapp_service2'
         DOCKER_IMAGE_TAG = "${env.BUILD_ID}"
+        ECR_REPOSITORY_FRONTEND = 'reactprojectwebapp_frontend'
+        DOCKER_HUB_REPOSITORY = 'rameshkrishnannarakrish/reactprojectwebapp_frontend'
+        DOCKER_REGISTRY_URL = 'docker.io'
     }
 
     stages {
-        stage('Checkout') {
+        stage('Checkout from Git') {
             steps {
-                checkout scm
+                git branch: 'main', url: 'https://github.com/RameshKrishnanNaraKrish/react-project-webapp.git'
             }
         }
 
-        stage('Install Node.js and npm') {
+        stage('OWASP Dependency-Check Scan') {
             steps {
-                script {
-                    sh '''
-                    sudo curl -sL https://deb.nodesource.com/setup_16.x | sudo -E bash -
-                    sudo apt-get install -y nodejs
-                    '''
+                dir('Application-Code/frontend') {
+                    dependencyCheck additionalArguments: '--scan ./ --disableYarnAudit --disableNodeAudit', odcInstallation: 'DP-Check'
+                    dependencyCheckPublisher pattern: '**/dependency-check-report.xml'
                 }
             }
         }
 
-        stage('Install dependencies frontend') {
+        stage('Trivy File Scan') {
+            steps {
+                dir('Application-Code/frontend') {
+                    sh 'trivy fs . > trivyfs.txt'
+                }
+            }
+        }
+
+        stage('Docker Login to Docker Hub') {
+            steps {
+                script {
+                    // Use Jenkins credentials to log in to Docker Hub
+                    withCredentials([usernamePassword(credentialsId: 'docker-hub-credentials', usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD')]) {
+                        sh '''
+                        echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin "$DOCKER_REGISTRY_URL"
+                        '''
+                    }
+                }
+            }
+        }
+
+        stage('Build and Push Docker Image to Docker Hub (frontend)') {
             steps {
                 dir('frontend') {
-                    sh 'npm install'
-                    sh 'npm run build'
-                }
-            }
-        }
-
-        stage('Install dependencies service1') {
-            steps {
-                dir('backend/service1') {
-                    sh 'npm install'
-                }
-            }
-        }
-
-        stage('Install dependencies service2') {
-            steps {
-                dir('backend/service2') {
-                    sh 'npm install'
-                }
-            }
-        }
-
-        stage('Docker Login to ECR') {
-            steps {
-                script {
-                    sh '''
-                    aws ecr-public get-login-password --region us-east-1 | docker login --username AWS --password-stdin public.ecr.aws/l1b1a8r4
-                    '''
-                }
-            }
-        }
-
-        stage('Build and Push Docker Image service1') {
-            steps {
-                script {
-                    dir('backend/service1'){
-                    sh '''
-                    docker build -t $ECR_REPOSITORY_FRONTEND:$DOCKER_IMAGE_TAG ./frontend
-                    docker tag $ECR_REPOSITORY_FRONTEND:$DOCKER_IMAGE_TAG public.ecr.aws/l1b1a8r4/$ECR_REPOSITORY_FRONTEND:$DOCKER_IMAGE_TAG
-                    docker push public.ecr.aws/l1b1a8r4/$ECR_REPOSITORY_FRONTEND:$DOCKER_IMAGE_TAG
-                    '''
+                    script {
+                        sh '''
+                        docker build -t $DOCKER_HUB_REPOSITORY:$DOCKER_IMAGE_TAG .
+                        docker tag $DOCKER_HUB_REPOSITORY:$DOCKER_IMAGE_TAG $DOCKER_HUB_REPOSITORY:$DOCKER_IMAGE_TAG
+                        docker push $DOCKER_HUB_REPOSITORY:$DOCKER_IMAGE_TAG
+                        '''
                     }
                 }
             }
         }
 
-        stage('Build and Push Docker Image service1') {
+        stage("TRIVY Image Scan") {
             steps {
-                script {
-                    sh '''
-                    docker build -t $ECR_REPOSITORY_SERVICE1:$DOCKER_IMAGE_TAG ./backend/service1
-                    docker tag $ECR_REPOSITORY_SERVICE1:$DOCKER_IMAGE_TAG $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/$ECR_REPOSITORY_SERVICE1:$DOCKER_IMAGE_TAG
-                    docker push $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/$ECR_REPOSITORY_SERVICE1:$DOCKER_IMAGE_TAG
-                    '''
-                }
+                sh 'trivy image $DOCKER_HUB_REPOSITORY:$DOCKER_IMAGE_TAG > trivyimage.txt'
             }
         }
 
-        stage('Build and Push Docker Image service2') {
+        stage('Checkout Code') {
             steps {
-                script {
-                    sh '''
-                    docker build -t $ECR_REPOSITORY_SERVICE2:$DOCKER_IMAGE_TAG ./backend/service2
-                    docker tag $ECR_REPOSITORY_SERVICE2:$DOCKER_IMAGE_TAG $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/$ECR_REPOSITORY_SERVICE2:$DOCKER_IMAGE_TAG
-                    docker push $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/$ECR_REPOSITORY_SERVICE2:$DOCKER_IMAGE_TAG
-                    '''
-                }
-            }
-        }
-
-        stage('SonarCloud Scan') {
-            steps {
-                script {
-                    withSonarQubeEnv('sonar-server') {
-                        sh ''' $SCANNER_HOME/bin/sonar-scanner -Dsonar.projectName=react-project-webapp -Dsonar.projectKey=RameshKrishnanNaraKrish_react-project-webapp '''
-                    }
-                }
-            }
-        }
-
-        stage('Update Helm Values') {
-            steps {
-                script {
-                    sh '''
-                    sed -i 's/tag: .*/tag: "${env.BUILD_ID}"/' helm/react-web-app-chart/values.yaml
-                    git config --global user.email "actions@github.com"
-                    git config --global user.name "GitHub Actions"
-                    git add helm/react-web-app-chart/values.yaml
-                    git commit -m "Update tag in Helm chart"
-                    git push
-                    '''
-                }
+                git branch: 'main', url: 'https://github.com/RameshKrishnanNaraKrish/react-project-webapp.git'
             }
         }
     }

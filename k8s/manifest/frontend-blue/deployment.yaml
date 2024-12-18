@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
       - name: frontend
-        image: public.ecr.aws/l1b1a8r4/reactprojectwebapp_frontend:8  # Replace with your frontend Docker image
-    env:
-    - name: REACT_APP_API_URL
-      value: "http://myapp.orgramesh.com"
+        image: public.ecr.aws/l1b1a8r4/reactprojectwebapp_frontend:9  # Replace with your frontend Docker image
+        env:
+        - name: REACT_APP_API_URL
+          value: "http://myapp.orgramesh.com"

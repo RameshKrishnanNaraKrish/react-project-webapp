@@ -66,7 +66,7 @@ pipeline {
                 git branch: 'main', url: 'https://github.com/RameshKrishnanNaraKrish/react-project-webapp.git'
             }
         }
-        stage('Update Deployment file') {
+        stage('Update Deployment file blue') {
             environment {
                 GIT_REPO_NAME = "react-project-webapp"
                 GIT_USER_NAME = "RameshKrishnanNaraKrish"
@@ -75,6 +75,7 @@ pipeline {
                 dir('k8s/manifest/fontend-blue') {
                     withCredentials([string(credentialsId: 'github', variable: 'GITHUB_TOKEN')]) {
                         sh '''
+                            git pull origin master
                             git config user.email "nkrameshkrishnan@gmail.com"
                             git config user.name "RameshKrishnanNaraKrish"
                             BUILD_NUMBER=${BUILD_NUMBER}
@@ -89,10 +90,17 @@ pipeline {
                     }
                 }
             }
+        }
+        stage('Update Deployment file green') {
+            environment {
+                GIT_REPO_NAME = "react-project-webapp"
+                GIT_USER_NAME = "RameshKrishnanNaraKrish"
+            }        
             steps {
                 dir('k8s/manifest/fontend-green') {
                     withCredentials([string(credentialsId: 'github', variable: 'GITHUB_TOKEN')]) {
                         sh '''
+                            git pull origin master
                             git config user.email "nkrameshkrishnan@gmail.com"
                             git config user.name "RameshKrishnanNaraKrish"
                             BUILD_NUMBER=${BUILD_NUMBER}
