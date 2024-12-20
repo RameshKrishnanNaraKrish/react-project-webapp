@@ -8,9 +8,7 @@ const port = process.env.PORT || 3002;
 
 app.use(cors());
 app.use(express.json());
-//Just adding comment 
 
-/* this is mainly for PR merge PR testing */
 // MySQL database connection
 const db = mysql.createConnection({
   host: process.env.DB_HOST,
